@@ -1,9 +1,9 @@
 {
   "REPORT": {
-    "HEADER": "التقارير",
+    "HEADER": "Overview",
     "LOADING_CHART": "تحميل بيانات الرسم البياني...",
     "NO_ENOUGH_DATA": "لم يتم جمع بيانات بقدر كافي لإنشاء التقرير، الرجاء المحاولة مرة أخرى لاحقاً.",
-    "DOWNLOAD_AGENT_REPORTS": "Download agent reports",
+    "DOWNLOAD_AGENT_REPORTS": "تنزيل تقارير الوكيل",
     "METRICS": {
       "CONVERSATIONS": {
         "NAME": "المحادثات",
@@ -38,7 +38,53 @@
       {
         "id": 1,
         "name": "آخر 30 يوماً"
+      },
+      {
+        "id": 2,
+        "name": "Last 3 months"
+      },
+      {
+        "id": 3,
+        "name": "Last 6 months"
+      },
+      {
+        "id": 4,
+        "name": "العام الماضي"
+      },
+      {
+        "id": 5,
+        "name": "تحديد نطاق المدة"
       }
-    ]
+    ],
+    "CUSTOM_DATE_RANGE": {
+      "CONFIRM": "تطبيق",
+      "PLACEHOLDER": "اختر نطاق المدة"
+    }
+  },
+  "CSAT_REPORTS": {
+    "HEADER": "تقارير CSAT",
+    "NO_RECORDS": "لا توجد ردود متوفرة على الدراسة الاستقصائية CSAT.",
+    "TABLE": {
+      "HEADER": {
+        "CONTACT_NAME": "جهات الاتصال",
+        "AGENT_NAME": "الوكيل المكلف",
+        "RATING": "التقييم",
+        "FEEDBACK_TEXT": "تعليق الملاحظات"
+      }
+    },
+    "METRIC": {
+      "TOTAL_RESPONSES": {
+        "LABEL": "إجمالي الردود",
+        "TOOLTIP": "العدد الإجمالي للردود التي تم جمعها"
+      },
+      "SATISFACTION_SCORE": {
+        "LABEL": "درجة الرضا",
+        "TOOLTIP": "العدد الإجمالي للردود الإيجابية/ العدد الإجمالي للردود * 100"
+      },
+      "RESPONSE_RATE": {
+        "LABEL": "معدل الاستجابة",
+        "TOOLTIP": "العدد الإجمالي للردود / العدد الإجمالي لرسائل الاستقصاء التي أرسلتها CSAT * 100"
+      }
+    }
   }
 }

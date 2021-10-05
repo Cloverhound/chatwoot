@@ -7,30 +7,52 @@
     >
       <woot-dropdown-menu>
         <woot-dropdown-item v-if="showChangeAccountOption">
-          <button
-            class="button clear change-accounts--button"
+          <woot-button
+            variant="clear"
+            size="small"
+            class=" change-accounts--button"
             @click="$emit('toggle-accounts')"
           >
             {{ $t('SIDEBAR_ITEMS.CHANGE_ACCOUNTS') }}
-          </button>
+          </woot-button>
         </woot-dropdown-item>
         <woot-dropdown-item v-if="globalConfig.chatwootInboxToken">
-          <button
-            class="button clear change-accounts--button"
+          <woot-button
+            variant="clear"
+            size="small"
+            class=" change-accounts--button"
             @click="$emit('show-support-chat-window')"
           >
             Contact Support
-          </button>
+          </woot-button>
         </woot-dropdown-item>
         <woot-dropdown-item>
-          <router-link :to="`/app/accounts/${accountId}/profile/settings`">
+          <woot-button
+            variant="clear"
+            size="small"
+            class=" change-accounts--button"
+            @click="$emit('key-shortcut-modal')"
+          >
+            {{ $t('SIDEBAR_ITEMS.KEYBOARD_SHORTCUTS') }}
+          </woot-button>
+        </woot-dropdown-item>
+        <woot-dropdown-item>
+          <router-link
+            :to="`/app/accounts/${accountId}/profile/settings`"
+            class="button clear small change-accounts--button"
+          >
             {{ $t('SIDEBAR_ITEMS.PROFILE_SETTINGS') }}
           </router-link>
         </woot-dropdown-item>
         <woot-dropdown-item>
-          <a href="#" @click.prevent="logout">
+          <woot-button
+            variant="clear"
+            size="small"
+            class=" change-accounts--button"
+            @click="logout"
+          >
             {{ $t('SIDEBAR_ITEMS.LOGOUT') }}
-          </a>
+          </woot-button>
         </woot-dropdown-item>
       </woot-dropdown-menu>
     </div>
@@ -72,11 +94,12 @@ export default {
   methods: {
     logout() {
       Auth.logout();
-
-      if (this.globalConfig.chatwootInboxToken) {
-        window.$chatwoot.reset();
-      }
     },
   },
 };
 </script>
+<style lang="scss" scoped>
+.dropdown-pane {
+  right: 0;
+}
+</style>

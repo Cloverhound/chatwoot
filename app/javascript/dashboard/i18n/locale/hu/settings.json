@@ -3,6 +3,8 @@
     "LINK": "Profilbeállítások",
     "TITLE": "Profilbeállítások",
     "BTN_TEXT": "Profil frissítése",
+    "UPDATE_SUCCESS": "A fiókod sikeresen frissítetted",
+    "PASSWORD_UPDATE_SUCCESS": "A jelszavad sikeresen megváltoztattad",
     "AFTER_EMAIL_CHANGED": "A profilod sikeresen frissítésre került, kérjük lépj be újra, mivel megváltoztak a belépési adataid",
     "FORM": {
       "AVATAR": "Profilkép",
@@ -16,11 +18,19 @@
       },
       "PASSWORD_SECTION": {
         "TITLE": "Jelszó",
-        "NOTE": "A jelszó frissítása minden beléptetett eszközt kiléptet."
+        "NOTE": "A jelszó frissítása minden beléptetett eszközt kiléptet.",
+        "BTN_TEXT": "Jelszó megváltoztatása"
       },
       "ACCESS_TOKEN": {
         "TITLE": "Hozzáférési kulcs",
         "NOTE": "Ez a kulcs akkor használható, ha API-alapú integrációt építesz"
+      },
+      "AUDIO_NOTIFICATIONS_SECTION": {
+        "TITLE": "Hangüzenetek",
+        "NOTE": "Hangüzenetek engedélyezése a vezérlőpulton új üzenetek és beszélgetések esetén.",
+        "NONE": "Nincs",
+        "ASSIGNED": "Assigned Conversations",
+        "ALL_CONVERSATIONS": "All Conversations"
       },
       "EMAIL_NOTIFICATIONS_SECTION": {
         "TITLE": "E-mail értesítések",
@@ -70,6 +80,11 @@
         "ERROR": "Kérjük helyes e-mailcímet adj meg",
         "PLACEHOLDER": "Kérjük add meg az e-mailcímet amit a beszélgetésekben szeretnél megjeleníteni"
       },
+      "CURRENT_PASSWORD": {
+        "LABEL": "Current password",
+        "ERROR": "Please enter the current password",
+        "PLACEHOLDER": "Please enter the current password"
+      },
       "PASSWORD": {
         "LABEL": "Jelszó",
         "ERROR": "Kérjük 6 karakternél hosszabb jelszót adj meg",
@@ -87,6 +102,7 @@
     "CHANGE_ACCOUNTS": "Fiókváltás",
     "SELECTOR_SUBTITLE": "Fiók kiválasztása az alábbi listából",
     "PROFILE_SETTINGS": "Profilbeállítások",
+    "KEYBOARD_SHORTCUTS": "Keyboard Shortcuts",
     "LOGOUT": "Kilépés"
   },
   "APP_GLOBAL": {
@@ -115,8 +131,8 @@
   "SIDEBAR": {
     "CONVERSATIONS": "Beszélgetések",
     "REPORTS": "Jelentések",
-    "CONTACTS": "Kontaktok",
     "SETTINGS": "Beállítások",
+    "CONTACTS": "Kontaktok",
     "HOME": "Nyitólap",
     "AGENTS": "Ügynökök",
     "INBOXES": "Bejövők",
@@ -124,10 +140,20 @@
     "CANNED_RESPONSES": "Mentett válaszok",
     "INTEGRATIONS": "Integrációk",
     "ACCOUNT_SETTINGS": "Fiókbeállítások",
+    "APPLICATIONS": "Applications",
     "LABELS": "Cimkék",
-    "TEAMS": "Csapatok"
+    "ATTRIBUTES": "Attributes",
+    "TEAMS": "Csapatok",
+    "ALL_CONTACTS": "All Contacts",
+    "TAGGED_WITH": "Tagged with",
+    "REPORTS_OVERVIEW": "Overview",
+    "CSAT": "CSAT",
+    "CAMPAIGNS": "Campaigns",
+    "ONGOING": "Ongoing",
+    "ONE_OFF": "One off"
   },
   "CREATE_ACCOUNT": {
+    "NO_ACCOUNT_WARNING": "Uh oh! We could not find any Chatwoot accounts. Please create a new account to continue.",
     "NEW_ACCOUNT": "Új fiók",
     "SELECTOR_SUBTITLE": "Új fiók létrehozása",
     "API": {
@@ -141,6 +167,31 @@
         "PLACEHOLDER": "Kovács Kft."
       },
       "SUBMIT": "Elküldés"
+    }
+  },
+  "KEYBOARD_SHORTCUTS": {
+    "TITLE": {
+      "OPEN_CONVERSATION": "Open conversation",
+      "RESOLVE_AND_NEXT": "Resolve and move to next",
+      "NAVIGATE_DROPDOWN": "Navigate dropdown items",
+      "RESOLVE_CONVERSATION": "Resolve Conversation",
+      "GO_TO_CONVERSATION_DASHBOARD": "Go to Conversation Dashboard",
+      "ADD_ATTACHMENT": "Add Attachment",
+      "GO_TO_CONTACTS_DASHBOARD": "Go to Contacts Dashboard",
+      "TOGGLE_SIDEBAR": "Toggle Sidebar",
+      "GO_TO_REPORTS_SIDEBAR": "Go to Reports sidebar",
+      "MOVE_TO_NEXT_TAB": "Move to next tab in conversation list",
+      "GO_TO_SETTINGS": "Go to Settings",
+      "SWITCH_CONVERSATION_STATUS": "Switch to the next conversation status",
+      "SWITCH_TO_PRIVATE_NOTE": "Switch to Private Note",
+      "TOGGLE_RICH_CONTENT_EDITOR": "Toggle Rich Content editor",
+      "SWITCH_TO_REPLY": "Switch to Reply",
+      "TOGGLE_SNOOZE_DROPDOWN": "Toggle snooze dropdown"
+    },
+    "KEYS": {
+      "WINDOWS_KEY_AND_COMMAND_KEY": "Win / ⌘",
+      "ALT_OR_OPTION_KEY": "Alt / ⌥",
+      "FORWARD_SLASH_KEY": "/"
     }
   }
 }

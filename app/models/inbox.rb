@@ -6,8 +6,10 @@
 #
 #  id                     :integer          not null, primary key
 #  channel_type           :string
+#  csat_survey_enabled    :boolean          default(FALSE)
 #  email_address          :string
 #  enable_auto_assignment :boolean          default(TRUE)
+#  enable_email_collect   :boolean          default(TRUE)
 #  greeting_enabled       :boolean          default(FALSE)
 #  greeting_message       :string
 #  name                   :string           not null
@@ -29,6 +31,7 @@ class Inbox < ApplicationRecord
   include Avatarable
   include OutOfOffisable
 
+  validates :name, presence: true
   validates :account_id, presence: true
   validates :timezone, inclusion: { in: TZInfo::Timezone.all_identifiers }
 
@@ -36,6 +39,7 @@ class Inbox < ApplicationRecord
 
   belongs_to :channel, polymorphic: true, dependent: :destroy
 
+  has_many :campaigns, dependent: :destroy
   has_many :contact_inboxes, dependent: :destroy
   has_many :contacts, through: :contact_inboxes
 
@@ -59,16 +63,24 @@ class Inbox < ApplicationRecord
   end
 
   def remove_member(user_id)
-    member = inbox_members.find_by(user_id: user_id)
+    member = inbox_members.find_by!(user_id: user_id)
     member.try(:destroy)
   end
 
   def facebook?
-    channel.class.name.to_s == 'Channel::FacebookPage'
+    channel_type == 'Channel::FacebookPage'
   end
 
   def web_widget?
-    channel.class.name.to_s == 'Channel::WebWidget'
+    channel_type == 'Channel::WebWidget'
+  end
+
+  def api?
+    channel_type == 'Channel::Api'
+  end
+
+  def email?
+    channel_type == 'Channel::Email'
   end
 
   def inbox_type
@@ -80,6 +92,15 @@ class Inbox < ApplicationRecord
       id: id,
       name: name
     }
+  end
+
+  def callback_webhook_url
+    case channel_type
+    when 'Channel::TwilioSms'
+      "#{ENV['FRONTEND_URL']}/twilio/callback"
+    when 'Channel::Line'
+      "#{ENV['FRONTEND_URL']}/webhooks/line/#{channel.line_channel_id}"
+    end
   end
 
   private

@@ -12,8 +12,10 @@
         <h3 class="user--name text-truncate">
           {{ currentContact.name }}
         </h3>
-        <button
-          class="user--profile__button clear button small"
+        <woot-button
+          class="user--profile__button"
+          size="small"
+          variant="link"
           @click="$emit('contact-panel-toggle')"
         >
           {{
@@ -23,30 +25,13 @@
                 : $t('CONVERSATION.HEADER.OPEN')
             } ${$t('CONVERSATION.HEADER.DETAILS')}`
           }}
-        </button>
+        </woot-button>
       </div>
     </div>
     <div
       class="header-actions-wrap"
       :class="{ 'has-open-sidebar': isContactPanelOpen }"
     >
-      <div class="multiselect-box ion-headphone">
-        <multiselect
-          v-model="currentChat.meta.assignee"
-          :allow-empty="true"
-          :deselect-label="$t('CONVERSATION.ASSIGNMENT.REMOVE')"
-          :options="agentList"
-          :placeholder="$t('CONVERSATION.ASSIGNMENT.SELECT_AGENT')"
-          :select-label="$t('CONVERSATION.ASSIGNMENT.ASSIGN')"
-          label="name"
-          selected-label
-          track-by="id"
-          @select="assignAgent"
-          @remove="removeAgent"
-        >
-          <span slot="noResult">{{ $t('AGENT_MGMT.SEARCH.NO_RESULTS') }}</span>
-        </multiselect>
-      </div>
       <more-actions :conversation-id="currentChat.id" />
     </div>
   </div>
@@ -55,13 +40,16 @@
 import { mapGetters } from 'vuex';
 import MoreActions from './MoreActions';
 import Thumbnail from '../Thumbnail';
+import agentMixin from '../../../mixins/agentMixin.js';
+import eventListenerMixins from 'shared/mixins/eventListenerMixins';
+import { hasPressedAltAndOKey } from 'shared/helpers/KeyboardHelpers';
 
 export default {
   components: {
     MoreActions,
     Thumbnail,
   },
-
+  mixins: [agentMixin, eventListenerMixins],
   props: {
     chat: {
       type: Object,
@@ -76,12 +64,13 @@ export default {
   data() {
     return {
       currentChatAssignee: null,
+      inboxId: null,
     };
   },
 
   computed: {
     ...mapGetters({
-      agents: 'agents/getVerifiedAgents',
+      uiFlags: 'inboxAssignableAgents/getUIFlags',
       currentChat: 'getSelectedChat',
     }),
 
@@ -94,35 +83,18 @@ export default {
         this.chat.meta.sender.id
       );
     },
-
-    agentList() {
-      return [
-        {
-          confirmed: true,
-          name: 'None',
-          id: 0,
-          role: 'agent',
-          account_id: 0,
-          email: 'None',
-        },
-        ...this.agents,
-      ];
-    },
+  },
+  mounted() {
+    const { inbox_id: inboxId } = this.chat;
+    this.inboxId = inboxId;
   },
 
   methods: {
-    assignAgent(agent) {
-      this.$store
-        .dispatch('assignAgent', {
-          conversationId: this.currentChat.id,
-          agentId: agent.id,
-        })
-        .then(() => {
-          bus.$emit('newToastMessage', this.$t('CONVERSATION.CHANGE_AGENT'));
-        });
+    handleKeyEvents(e) {
+      if (hasPressedAltAndOKey(e)) {
+        this.$emit('contact-panel-toggle');
+      }
     },
-
-    removeAgent() {},
   },
 };
 </script>
@@ -136,5 +108,18 @@ export default {
 
 .conv-header {
   flex: 0 0 var(--space-jumbo);
+}
+
+.option__desc {
+  display: flex;
+  align-items: center;
+}
+
+.option__desc {
+  &::v-deep .status-badge {
+    margin-right: var(--space-small);
+    min-width: 0;
+    flex-shrink: 0;
+  }
 }
 </style>

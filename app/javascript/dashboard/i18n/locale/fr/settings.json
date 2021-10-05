@@ -3,6 +3,8 @@
     "LINK": "Paramètres de profil",
     "TITLE": "Paramètres de profil",
     "BTN_TEXT": "Mettre à jour le profil",
+    "UPDATE_SUCCESS": "Votre profil a été mis à jour avec succès",
+    "PASSWORD_UPDATE_SUCCESS": "Votre mot de passe a été modifié avec succès",
     "AFTER_EMAIL_CHANGED": "Votre profil a été mis à jour avec succès, veuillez vous reconnecter car vos identifiants de connexion ont été modifiés",
     "FORM": {
       "AVATAR": "Image de profil",
@@ -16,11 +18,19 @@
       },
       "PASSWORD_SECTION": {
         "TITLE": "Mot de passe",
-        "NOTE": "Mettre à jour votre mot de passe réinitialisera vos connexions sur plusieurs appareils."
+        "NOTE": "Mettre à jour votre mot de passe réinitialisera vos connexions sur plusieurs appareils.",
+        "BTN_TEXT": "Modifier le mot de passe"
       },
       "ACCESS_TOKEN": {
         "TITLE": "Jeton d'accès",
         "NOTE": "Ce jeton peut être utilisé si vous construisez une intégration basée sur l'API"
+      },
+      "AUDIO_NOTIFICATIONS_SECTION": {
+        "TITLE": "Notifications audio",
+        "NOTE": "Activer les notifications audio dans le tableau de bord pour les nouveaux messages et conversations.",
+        "NONE": "Aucun",
+        "ASSIGNED": "Assigned Conversations",
+        "ALL_CONVERSATIONS": "All Conversations"
       },
       "EMAIL_NOTIFICATIONS_SECTION": {
         "TITLE": "Notifications par courriel",
@@ -70,6 +80,11 @@
         "ERROR": "Veuillez saisir une adresse de courriel valide",
         "PLACEHOLDER": "Veuillez entrer votre adresse de courriel, cela sera affiché dans les conversations"
       },
+      "CURRENT_PASSWORD": {
+        "LABEL": "Mot de passe actuel",
+        "ERROR": "Veuillez entrer le mot de passe actuel",
+        "PLACEHOLDER": "Veuillez entrer le mot de passe actuel"
+      },
       "PASSWORD": {
         "LABEL": "Mot de passe",
         "ERROR": "Veuillez entrer un mot de passe de 6 caractères ou plus",
@@ -87,6 +102,7 @@
     "CHANGE_ACCOUNTS": "Changer de compte",
     "SELECTOR_SUBTITLE": "Sélectionnez un compte dans la liste suivante",
     "PROFILE_SETTINGS": "Paramètres de profil",
+    "KEYBOARD_SHORTCUTS": "Keyboard Shortcuts",
     "LOGOUT": "Se déconnecter"
   },
   "APP_GLOBAL": {
@@ -115,8 +131,8 @@
   "SIDEBAR": {
     "CONVERSATIONS": "Conversations",
     "REPORTS": "Rapports",
-    "CONTACTS": "Contacts",
     "SETTINGS": "Paramètres",
+    "CONTACTS": "Contacts",
     "HOME": "Accueil",
     "AGENTS": "Agents",
     "INBOXES": "Boîtes de réception",
@@ -124,10 +140,20 @@
     "CANNED_RESPONSES": "Réponses standardisées",
     "INTEGRATIONS": "Intégrations",
     "ACCOUNT_SETTINGS": "Paramètres du compte",
+    "APPLICATIONS": "Applications",
     "LABELS": "Étiquettes",
-    "TEAMS": "Équipes"
+    "ATTRIBUTES": "Attributes",
+    "TEAMS": "Équipes",
+    "ALL_CONTACTS": "Tous les contacts",
+    "TAGGED_WITH": "Tagué avec",
+    "REPORTS_OVERVIEW": "Overview",
+    "CSAT": "CSAT",
+    "CAMPAIGNS": "Campagnes",
+    "ONGOING": "Ongoing",
+    "ONE_OFF": "One off"
   },
   "CREATE_ACCOUNT": {
+    "NO_ACCOUNT_WARNING": "Uh oh! We could not find any Chatwoot accounts. Please create a new account to continue.",
     "NEW_ACCOUNT": "Nouveau compte",
     "SELECTOR_SUBTITLE": "Créer un nouveau compte",
     "API": {
@@ -141,6 +167,31 @@
         "PLACEHOLDER": "Entreprises Wayne"
       },
       "SUBMIT": "Envoyer"
+    }
+  },
+  "KEYBOARD_SHORTCUTS": {
+    "TITLE": {
+      "OPEN_CONVERSATION": "Open conversation",
+      "RESOLVE_AND_NEXT": "Resolve and move to next",
+      "NAVIGATE_DROPDOWN": "Navigate dropdown items",
+      "RESOLVE_CONVERSATION": "Resolve Conversation",
+      "GO_TO_CONVERSATION_DASHBOARD": "Go to Conversation Dashboard",
+      "ADD_ATTACHMENT": "Add Attachment",
+      "GO_TO_CONTACTS_DASHBOARD": "Go to Contacts Dashboard",
+      "TOGGLE_SIDEBAR": "Toggle Sidebar",
+      "GO_TO_REPORTS_SIDEBAR": "Go to Reports sidebar",
+      "MOVE_TO_NEXT_TAB": "Move to next tab in conversation list",
+      "GO_TO_SETTINGS": "Go to Settings",
+      "SWITCH_CONVERSATION_STATUS": "Switch to the next conversation status",
+      "SWITCH_TO_PRIVATE_NOTE": "Switch to Private Note",
+      "TOGGLE_RICH_CONTENT_EDITOR": "Toggle Rich Content editor",
+      "SWITCH_TO_REPLY": "Switch to Reply",
+      "TOGGLE_SNOOZE_DROPDOWN": "Toggle snooze dropdown"
+    },
+    "KEYS": {
+      "WINDOWS_KEY_AND_COMMAND_KEY": "Win / ⌘",
+      "ALT_OR_OPTION_KEY": "Alt / ⌥",
+      "FORWARD_SLASH_KEY": "/"
     }
   }
 }

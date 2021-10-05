@@ -3,6 +3,8 @@
     "LINK": "Profilindstillinger",
     "TITLE": "Profilindstillinger",
     "BTN_TEXT": "Opdater Profil",
+    "UPDATE_SUCCESS": "Your profile has been updated successfully",
+    "PASSWORD_UPDATE_SUCCESS": "Din adgangskode er blevet ændret",
     "AFTER_EMAIL_CHANGED": "Din profil er blevet opdateret. Log venligst ind igen, da dine loginoplysninger er ændret",
     "FORM": {
       "AVATAR": "Profilbillede",
@@ -16,11 +18,19 @@
       },
       "PASSWORD_SECTION": {
         "TITLE": "Adgangskode",
-        "NOTE": "Opdatering af din adgangskode vil nulstille dine logins på flere enheder."
+        "NOTE": "Opdatering af din adgangskode vil nulstille dine logins på flere enheder.",
+        "BTN_TEXT": "Change password"
       },
       "ACCESS_TOKEN": {
         "TITLE": "Adgangs Token",
         "NOTE": "Denne token kan bruges, hvis du bygger en API-baseret integration"
+      },
+      "AUDIO_NOTIFICATIONS_SECTION": {
+        "TITLE": "Audio Notifications",
+        "NOTE": "Enable audio notifications in dashboard for new messages and conversations.",
+        "NONE": "None",
+        "ASSIGNED": "Assigned Conversations",
+        "ALL_CONVERSATIONS": "All Conversations"
       },
       "EMAIL_NOTIFICATIONS_SECTION": {
         "TITLE": "E-Mail Notifikationer",
@@ -70,6 +80,11 @@
         "ERROR": "Indtast venligst en gyldig e-mailadresse",
         "PLACEHOLDER": "Indtast venligst din e-mailadresse, dette vil blive vist i samtaler"
       },
+      "CURRENT_PASSWORD": {
+        "LABEL": "Current password",
+        "ERROR": "Please enter the current password",
+        "PLACEHOLDER": "Please enter the current password"
+      },
       "PASSWORD": {
         "LABEL": "Adgangskode",
         "ERROR": "Indtast en adgangskode med længde 6 eller flere",
@@ -87,6 +102,7 @@
     "CHANGE_ACCOUNTS": "Skift Konto",
     "SELECTOR_SUBTITLE": "Vælg en konto fra følgende liste",
     "PROFILE_SETTINGS": "Profilindstillinger",
+    "KEYBOARD_SHORTCUTS": "Keyboard Shortcuts",
     "LOGOUT": "Log Ud"
   },
   "APP_GLOBAL": {
@@ -115,8 +131,8 @@
   "SIDEBAR": {
     "CONVERSATIONS": "Samtaler",
     "REPORTS": "Rapporter",
-    "CONTACTS": "Kontakter",
     "SETTINGS": "Indstillinger",
+    "CONTACTS": "Kontakter",
     "HOME": "Hjem",
     "AGENTS": "Agenter",
     "INBOXES": "Indbakker",
@@ -124,10 +140,20 @@
     "CANNED_RESPONSES": "Standardsvar Svar",
     "INTEGRATIONS": "Integrationer",
     "ACCOUNT_SETTINGS": "Kontoindstillinger",
+    "APPLICATIONS": "Applications",
     "LABELS": "Etiketter",
-    "TEAMS": "Teams"
+    "ATTRIBUTES": "Attributes",
+    "TEAMS": "Teams",
+    "ALL_CONTACTS": "All Contacts",
+    "TAGGED_WITH": "Tagged with",
+    "REPORTS_OVERVIEW": "Overview",
+    "CSAT": "CSAT",
+    "CAMPAIGNS": "Campaigns",
+    "ONGOING": "Ongoing",
+    "ONE_OFF": "One off"
   },
   "CREATE_ACCOUNT": {
+    "NO_ACCOUNT_WARNING": "Uh oh! We could not find any Chatwoot accounts. Please create a new account to continue.",
     "NEW_ACCOUNT": "Ny Konto",
     "SELECTOR_SUBTITLE": "Opret en ny konto",
     "API": {
@@ -141,6 +167,31 @@
         "PLACEHOLDER": "Wayne Enterprises"
       },
       "SUBMIT": "Send"
+    }
+  },
+  "KEYBOARD_SHORTCUTS": {
+    "TITLE": {
+      "OPEN_CONVERSATION": "Open conversation",
+      "RESOLVE_AND_NEXT": "Resolve and move to next",
+      "NAVIGATE_DROPDOWN": "Navigate dropdown items",
+      "RESOLVE_CONVERSATION": "Resolve Conversation",
+      "GO_TO_CONVERSATION_DASHBOARD": "Go to Conversation Dashboard",
+      "ADD_ATTACHMENT": "Add Attachment",
+      "GO_TO_CONTACTS_DASHBOARD": "Go to Contacts Dashboard",
+      "TOGGLE_SIDEBAR": "Toggle Sidebar",
+      "GO_TO_REPORTS_SIDEBAR": "Go to Reports sidebar",
+      "MOVE_TO_NEXT_TAB": "Move to next tab in conversation list",
+      "GO_TO_SETTINGS": "Go to Settings",
+      "SWITCH_CONVERSATION_STATUS": "Switch to the next conversation status",
+      "SWITCH_TO_PRIVATE_NOTE": "Switch to Private Note",
+      "TOGGLE_RICH_CONTENT_EDITOR": "Toggle Rich Content editor",
+      "SWITCH_TO_REPLY": "Switch to Reply",
+      "TOGGLE_SNOOZE_DROPDOWN": "Toggle snooze dropdown"
+    },
+    "KEYS": {
+      "WINDOWS_KEY_AND_COMMAND_KEY": "Win / ⌘",
+      "ALT_OR_OPTION_KEY": "Alt / ⌥",
+      "FORWARD_SLASH_KEY": "/"
     }
   }
 }

@@ -1,10 +1,13 @@
 <template>
   <div class="view-box fill-height">
-    <div v-if="!currentChat.can_reply" class="banner messenger-policy--banner">
+    <div
+      v-if="!currentChat.can_reply && !isATwilioWhatsappChannel"
+      class="banner messenger-policy--banner"
+    >
       <span>
         {{ $t('CONVERSATION.CANNOT_REPLY') }}
         <a
-          href="https://developers.facebook.com/docs/messenger-platform/policy/policy-overview/"
+          :href="facebookReplyPolicy"
           rel="noopener noreferrer nofollow"
           target="_blank"
         >
@@ -12,14 +15,29 @@
         </a>
       </span>
     </div>
+    <div
+      v-if="!currentChat.can_reply && isATwilioWhatsappChannel"
+      class="banner messenger-policy--banner"
+    >
+      <span>
+        {{ $t('CONVERSATION.TWILIO_WHATSAPP_CAN_REPLY') }}
+        <a
+          :href="twilioWhatsAppReplyPolicy"
+          rel="noopener noreferrer nofollow"
+          target="_blank"
+        >
+          {{ $t('CONVERSATION.TWILIO_WHATSAPP_24_HOURS_WINDOW') }}
+        </a>
+      </span>
+    </div>
 
     <div v-if="isATweet" class="banner">
       <span v-if="!selectedTweetId">
-        {{ $t('CONVERSATION.LAST_INCOMING_TWEET') }}
+        {{ $t('CONVERSATION.SELECT_A_TWEET_TO_REPLY') }}
       </span>
       <span v-else>
         {{ $t('CONVERSATION.REPLYING_TO') }}
-        {{ selectedTweet }}
+        {{ selectedTweet.content || '' }}
       </span>
       <button
         v-if="selectedTweetId"
@@ -38,6 +56,7 @@
       <message
         v-for="message in getReadMessages"
         :key="message.id"
+        class="message--read"
         :data="message"
         :is-a-tweet="isATweet"
       />
@@ -54,11 +73,15 @@
       <message
         v-for="message in getUnReadMessages"
         :key="message.id"
+        class="message--unread"
         :data="message"
         :is-a-tweet="isATweet"
       />
     </ul>
-    <div class="conversation-footer">
+    <div
+      class="conversation-footer"
+      :class="{ 'modal-mask': isPopoutReplyBox }"
+    >
       <div v-if="isAnyoneTyping" class="typing-indicator-wrap">
         <div class="typing-indicator">
           {{ typingUserNames }}
@@ -69,9 +92,13 @@
           />
         </div>
       </div>
-      <ReplyBox
+      <reply-box
+        v-on-clickaway="closePopoutReplyBox"
         :conversation-id="currentChat.id"
-        :in-reply-to="selectedTweetId"
+        :is-a-tweet="isATweet"
+        :selected-tweet="selectedTweet"
+        :popout-reply-box="isPopoutReplyBox"
+        @click="showPopoutReplyBox"
         @scrollToMessage="scrollToBottom"
       />
     </div>
@@ -86,20 +113,20 @@ import Message from './Message';
 import conversationMixin from '../../../mixins/conversations';
 import { getTypingUsersText } from '../../../helper/commons';
 import { BUS_EVENTS } from 'shared/constants/busEvents';
+import { REPLY_POLICY } from 'shared/constants/links';
+import inboxMixin from 'shared/mixins/inboxMixin';
+import { calculateScrollTop } from './helpers/scrollTopCalculationHelper';
+import { isEscape } from 'shared/helpers/KeyboardHelpers';
+import eventListenerMixins from 'shared/mixins/eventListenerMixins';
+import { mixin as clickaway } from 'vue-clickaway';
 
 export default {
   components: {
     Message,
     ReplyBox,
   },
-
-  mixins: [conversationMixin],
-
+  mixins: [conversationMixin, inboxMixin, eventListenerMixins, clickaway],
   props: {
-    inboxId: {
-      type: [Number, String],
-      required: true,
-    },
     isContactPanelOpen: {
       type: Boolean,
       default: false,
@@ -112,6 +139,7 @@ export default {
       heightBeforeLoad: null,
       conversationPanel: null,
       selectedTweetId: null,
+      isPopoutReplyBox: false,
     };
   },
 
@@ -124,6 +152,12 @@ export default {
       getUnreadCount: 'getUnreadCount',
       loadingChatList: 'getChatListLoadingStatus',
     }),
+    inboxId() {
+      return this.currentChat.inbox_id;
+    },
+    inbox() {
+      return this.$store.getters['inboxes/getInbox'](this.inboxId);
+    },
 
     typingUsersList() {
       const userList = this.$store.getters[
@@ -184,12 +218,18 @@ export default {
     selectedTweet() {
       if (this.selectedTweetId) {
         const { messages = [] } = this.getMessages;
-        const [selectedMessage = {}] = messages.filter(
+        const [selectedMessage] = messages.filter(
           message => message.id === this.selectedTweetId
         );
-        return selectedMessage.content || '';
+        return selectedMessage || {};
       }
       return '';
+    },
+    facebookReplyPolicy() {
+      return REPLY_POLICY.FACEBOOK;
+    },
+    twilioWhatsAppReplyPolicy() {
+      return REPLY_POLICY.TWILIO_WHATSAPP;
     },
   },
 
@@ -204,7 +244,7 @@ export default {
 
   created() {
     bus.$on('scrollToMessage', () => {
-      setTimeout(() => this.scrollToBottom(), 0);
+      this.$nextTick(() => this.scrollToBottom());
       this.makeMessagesRead();
     });
 
@@ -222,18 +262,45 @@ export default {
   },
 
   methods: {
+    showPopoutReplyBox() {
+      this.isPopoutReplyBox = !this.isPopoutReplyBox;
+    },
+    closePopoutReplyBox() {
+      this.isPopoutReplyBox = false;
+    },
+    handleKeyEvents(e) {
+      if (isEscape(e)) {
+        this.closePopoutReplyBox();
+      }
+    },
     addScrollListener() {
       this.conversationPanel = this.$el.querySelector('.conversation-panel');
       this.setScrollParams();
       this.conversationPanel.addEventListener('scroll', this.handleScroll);
-      this.scrollToBottom();
+      this.$nextTick(() => this.scrollToBottom());
       this.isLoadingPrevious = false;
     },
     removeScrollListener() {
       this.conversationPanel.removeEventListener('scroll', this.handleScroll);
     },
     scrollToBottom() {
-      this.conversationPanel.scrollTop = this.conversationPanel.scrollHeight;
+      let relevantMessages = [];
+      if (this.getUnreadCount > 0) {
+        // capturing only the unread messages
+        relevantMessages = this.conversationPanel.querySelectorAll(
+          '.message--unread'
+        );
+      } else {
+        // capturing last message from the messages list
+        relevantMessages = Array.from(
+          this.conversationPanel.querySelectorAll('.message--read')
+        ).slice(-1);
+      }
+      this.conversationPanel.scrollTop = calculateScrollTop(
+        this.conversationPanel.scrollHeight,
+        this.$el.scrollHeight,
+        relevantMessages
+      );
     },
     onToggleContactPanel() {
       this.$emit('contact-panel-toggle');
@@ -313,5 +380,41 @@ export default {
 .view-box.fill-height {
   height: auto;
   flex-grow: 1;
+  min-width: 0;
+}
+
+.modal-mask {
+  &::v-deep {
+    .ProseMirror-woot-style {
+      max-height: 40rem;
+    }
+
+    .reply-box {
+      border: 1px solid var(--color-border);
+      max-width: 120rem;
+      width: 70%;
+    }
+
+    .reply-box .reply-box__top {
+      position: relative;
+      min-height: 44rem;
+    }
+
+    .reply-box__top .input {
+      min-height: 44rem;
+    }
+
+    .emoji-dialog {
+      position: fixed;
+      left: unset;
+      position: absolute;
+    }
+
+    .emoji-dialog::before {
+      transform: rotate(0deg);
+      left: 5px;
+      bottom: var(--space-minus-slab);
+    }
+  }
 }
 </style>

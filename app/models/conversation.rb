@@ -8,13 +8,14 @@
 #  contact_last_seen_at  :datetime
 #  identifier            :string
 #  last_activity_at      :datetime         not null
-#  locked                :boolean          default(FALSE)
+#  snoozed_until         :datetime
 #  status                :integer          default("open"), not null
 #  uuid                  :uuid             not null
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #  account_id            :integer          not null
 #  assignee_id           :integer
+#  campaign_id           :bigint
 #  contact_id            :bigint
 #  contact_inbox_id      :bigint
 #  display_id            :integer          not null
@@ -23,13 +24,17 @@
 #
 # Indexes
 #
-#  index_conversations_on_account_id                 (account_id)
-#  index_conversations_on_account_id_and_display_id  (account_id,display_id) UNIQUE
-#  index_conversations_on_contact_inbox_id           (contact_inbox_id)
-#  index_conversations_on_team_id                    (team_id)
+#  index_conversations_on_account_id                  (account_id)
+#  index_conversations_on_account_id_and_display_id   (account_id,display_id) UNIQUE
+#  index_conversations_on_assignee_id_and_account_id  (assignee_id,account_id)
+#  index_conversations_on_campaign_id                 (campaign_id)
+#  index_conversations_on_contact_inbox_id            (contact_inbox_id)
+#  index_conversations_on_status_and_account_id       (status,account_id)
+#  index_conversations_on_team_id                     (team_id)
 #
 # Foreign Keys
 #
+#  fk_rails_...  (campaign_id => campaigns.id)
 #  fk_rails_...  (contact_inbox_id => contact_inboxes.id)
 #  fk_rails_...  (team_id => teams.id)
 #
@@ -43,10 +48,11 @@ class Conversation < ApplicationRecord
   validates :inbox_id, presence: true
   before_validation :validate_additional_attributes
 
-  enum status: { open: 0, resolved: 1, bot: 2 }
+  enum status: { open: 0, resolved: 1, pending: 2, snoozed: 3 }
 
   scope :latest, -> { order(last_activity_at: :desc) }
   scope :unassigned, -> { where(assignee_id: nil) }
+  scope :assigned, -> { where.not(assignee_id: nil) }
   scope :assigned_to, ->(agent) { where(assignee_id: agent.id) }
 
   belongs_to :account
@@ -55,10 +61,14 @@ class Conversation < ApplicationRecord
   belongs_to :contact
   belongs_to :contact_inbox
   belongs_to :team, optional: true
+  belongs_to :campaign, optional: true
 
   has_many :messages, dependent: :destroy, autosave: true
+  has_one :csat_survey_response, dependent: :destroy
+  has_many :notifications, as: :primary_actor, dependent: :destroy
 
-  before_create :set_bot_conversation
+  before_save :ensure_snooze_until_reset
+  before_create :mark_conversation_pending_if_bot
 
   # wanted to change this to after_update commit. But it ended up creating a loop
   # reinvestigate in future and identity the implications
@@ -85,7 +95,7 @@ class Conversation < ApplicationRecord
   def toggle_status
     # FIXME: implement state machine with aasm
     self.status = open? ? :resolved : :open
-    self.status = :open if bot?
+    self.status = :open if pending? || snoozed?
     save
   end
 
@@ -102,14 +112,6 @@ class Conversation < ApplicationRecord
 
   def muted?
     Redis::Alfred.get(mute_key).present?
-  end
-
-  def lock!
-    update!(locked: true)
-  end
-
-  def unlock!
-    update!(locked: false)
   end
 
   def unread_messages
@@ -140,14 +142,23 @@ class Conversation < ApplicationRecord
     true
   end
 
+  def tweet?
+    inbox.inbox_type == 'Twitter' && additional_attributes['type'] == 'tweet'
+  end
+
   private
+
+  def ensure_snooze_until_reset
+    self.snoozed_until = nil unless snoozed?
+  end
 
   def validate_additional_attributes
     self.additional_attributes = {} unless additional_attributes.is_a?(Hash)
   end
 
-  def set_bot_conversation
-    self.status = :bot if inbox.agent_bot_inbox&.active?
+  def mark_conversation_pending_if_bot
+    # TODO: make this an inbox config instead of assuming bot conversations should start as pending
+    self.status = :pending if inbox.agent_bot_inbox&.active? || inbox.hooks.pluck(:app_id).include?('dialogflow')
   end
 
   def notify_conversation_creation
@@ -187,8 +198,8 @@ class Conversation < ApplicationRecord
     {
       CONVERSATION_OPENED => -> { saved_change_to_status? && open? },
       CONVERSATION_RESOLVED => -> { saved_change_to_status? && resolved? },
+      CONVERSATION_STATUS_CHANGED => -> { saved_change_to_status? },
       CONVERSATION_READ => -> { saved_change_to_contact_last_seen_at? },
-      CONVERSATION_LOCK_TOGGLE => -> { saved_change_to_locked? },
       CONVERSATION_CONTACT_CHANGED => -> { saved_change_to_contact_id? }
     }.each do |event, condition|
       condition.call && dispatcher_dispatch(event)

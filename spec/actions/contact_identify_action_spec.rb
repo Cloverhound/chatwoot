@@ -44,5 +44,26 @@ describe ::ContactIdentifyAction do
         expect { contact.reload }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
+
+    context 'when contact with same phone_number exists' do
+      it 'merges the current contact to phone_number contact' do
+        existing_phone_number_contact = create(:contact, account: account, phone_number: '+919999888877')
+        params = { phone_number: '+919999888877' }
+        result = described_class.new(contact: contact, params: params).perform
+        expect(result.id).to eq existing_phone_number_contact.id
+        expect(result.name).to eq existing_phone_number_contact.name
+        expect { contact.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context 'when contacts with blank identifiers exist and identify action is called with blank identifier' do
+      it 'updates the attributes of contact passed in to identify action' do
+        create(:contact, account: account, identifier: '')
+        params = { identifier: '', name: 'new name' }
+        result = described_class.new(contact: contact, params: params).perform
+        expect(result.id).to eq contact.id
+        expect(result.name).to eq 'new name'
+      end
+    end
   end
 end

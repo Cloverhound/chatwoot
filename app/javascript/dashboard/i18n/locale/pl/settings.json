@@ -3,6 +3,8 @@
     "LINK": "Ustawienia profilu",
     "TITLE": "Ustawienia profilu",
     "BTN_TEXT": "Aktualizuj profil",
+    "UPDATE_SUCCESS": "Your profile has been updated successfully",
+    "PASSWORD_UPDATE_SUCCESS": "Your password has been changed successfully",
     "AFTER_EMAIL_CHANGED": "Twój profil został pomyślnie zaktualizowany, zaloguj się ponownie po zmianie danych logowania",
     "FORM": {
       "AVATAR": "Zdjęcie profilowe",
@@ -16,23 +18,31 @@
       },
       "PASSWORD_SECTION": {
         "TITLE": "Hasło",
-        "NOTE": "Aktualizacja hasła spowoduje zresetowanie logowania na wielu urządzeniach."
+        "NOTE": "Aktualizacja hasła spowoduje zresetowanie logowania na wielu urządzeniach.",
+        "BTN_TEXT": "Change password"
       },
       "ACCESS_TOKEN": {
         "TITLE": "Token dostępu",
         "NOTE": "Ten token może być użyty, jeśli budujesz integrację opartą na API"
+      },
+      "AUDIO_NOTIFICATIONS_SECTION": {
+        "TITLE": "Powiadomienia dźwiękowe",
+        "NOTE": "Włącz powiadomienia audio na pulpicie dla nowych wiadomości i konwersacji.",
+        "NONE": "Brak",
+        "ASSIGNED": "Assigned Conversations",
+        "ALL_CONVERSATIONS": "All Conversations"
       },
       "EMAIL_NOTIFICATIONS_SECTION": {
         "TITLE": "Powiadomienia e-mail",
         "NOTE": "Zaktualizuj ustawienia powiadomień e-mail tutaj",
         "CONVERSATION_ASSIGNMENT": "Wysyłaj powiadomienia e-mail, gdy konwersacja jest przypisana do mnie",
         "CONVERSATION_CREATION": "Wysyłaj powiadomienia e-mail po utworzeniu nowej rozmowy",
-        "CONVERSATION_MENTION": "Send email notifications when you are mentioned in a conversation",
-        "ASSIGNED_CONVERSATION_NEW_MESSAGE": "Send email notifications when a new message is created in an assigned conversation"
+        "CONVERSATION_MENTION": "Wysyłaj powiadomienia e-mail, gdy zostaniesz wymieniony w rozmowie",
+        "ASSIGNED_CONVERSATION_NEW_MESSAGE": "Wysyłaj powiadomienia e-mail, gdy nowa wiadomość zostanie utworzona w przypisanej konwersacji"
       },
       "API": {
-        "UPDATE_SUCCESS": "Your notification preferences are updated successfully",
-        "UPDATE_ERROR": "There is an error while updating the preferences, please try again"
+        "UPDATE_SUCCESS": "Twoje preferencje powiadomień zostały pomyślnie zaktualizowane",
+        "UPDATE_ERROR": "Wystąpił błąd podczas aktualizacji preferencji, spróbuj ponownie"
       },
       "PUSH_NOTIFICATIONS_SECTION": {
         "TITLE": "Push Notifications",
@@ -50,7 +60,7 @@
       "NAME": {
         "LABEL": "Your full name",
         "ERROR": "Please enter a valid full name",
-        "PLACEHOLDER": "Please enter your full name"
+        "PLACEHOLDER": "Podaj swoje imię i nazwisko"
       },
       "DISPLAY_NAME": {
         "LABEL": "Display name",
@@ -61,7 +71,7 @@
         "LABEL": "Availability",
         "STATUSES_LIST": [
           "Online",
-          "Busy",
+          "Zajęty",
           "Offline"
         ]
       },
@@ -69,6 +79,11 @@
         "LABEL": "Twój adres e-mail",
         "ERROR": "Wprowadź poprawny adres e-mail",
         "PLACEHOLDER": "Wprowadź swój adres e-mail, który będzie wyświetlany w rozmowach"
+      },
+      "CURRENT_PASSWORD": {
+        "LABEL": "Current password",
+        "ERROR": "Please enter the current password",
+        "PLACEHOLDER": "Please enter the current password"
       },
       "PASSWORD": {
         "LABEL": "Hasło",
@@ -87,6 +102,7 @@
     "CHANGE_ACCOUNTS": "Switch Account",
     "SELECTOR_SUBTITLE": "Select an account from the following list",
     "PROFILE_SETTINGS": "Ustawienia profilu",
+    "KEYBOARD_SHORTCUTS": "Keyboard Shortcuts",
     "LOGOUT": "Wyloguj się"
   },
   "APP_GLOBAL": {
@@ -115,19 +131,29 @@
   "SIDEBAR": {
     "CONVERSATIONS": "Rozmowy",
     "REPORTS": "Raporty",
-    "CONTACTS": "Kontakty",
     "SETTINGS": "Ustawienia",
+    "CONTACTS": "Kontakty",
     "HOME": "Home",
     "AGENTS": "Agenci",
     "INBOXES": "Skrzynki",
-    "NOTIFICATIONS": "Notifications",
+    "NOTIFICATIONS": "Powiadomienia",
     "CANNED_RESPONSES": "Gotowe odpowiedzi",
     "INTEGRATIONS": "Integracje",
     "ACCOUNT_SETTINGS": "Account Settings",
+    "APPLICATIONS": "Applications",
     "LABELS": "Labels",
-    "TEAMS": "Teams"
+    "ATTRIBUTES": "Attributes",
+    "TEAMS": "Zespoły",
+    "ALL_CONTACTS": "All Contacts",
+    "TAGGED_WITH": "Tagged with",
+    "REPORTS_OVERVIEW": "Overview",
+    "CSAT": "CSAT",
+    "CAMPAIGNS": "Kampania",
+    "ONGOING": "Ongoing",
+    "ONE_OFF": "One off"
   },
   "CREATE_ACCOUNT": {
+    "NO_ACCOUNT_WARNING": "Uh oh! We could not find any Chatwoot accounts. Please create a new account to continue.",
     "NEW_ACCOUNT": "New Account",
     "SELECTOR_SUBTITLE": "Create a new account",
     "API": {
@@ -141,6 +167,31 @@
         "PLACEHOLDER": "Przedsiębiorstwa Wayne"
       },
       "SUBMIT": "Prześlij"
+    }
+  },
+  "KEYBOARD_SHORTCUTS": {
+    "TITLE": {
+      "OPEN_CONVERSATION": "Open conversation",
+      "RESOLVE_AND_NEXT": "Resolve and move to next",
+      "NAVIGATE_DROPDOWN": "Navigate dropdown items",
+      "RESOLVE_CONVERSATION": "Resolve Conversation",
+      "GO_TO_CONVERSATION_DASHBOARD": "Go to Conversation Dashboard",
+      "ADD_ATTACHMENT": "Add Attachment",
+      "GO_TO_CONTACTS_DASHBOARD": "Go to Contacts Dashboard",
+      "TOGGLE_SIDEBAR": "Toggle Sidebar",
+      "GO_TO_REPORTS_SIDEBAR": "Go to Reports sidebar",
+      "MOVE_TO_NEXT_TAB": "Move to next tab in conversation list",
+      "GO_TO_SETTINGS": "Go to Settings",
+      "SWITCH_CONVERSATION_STATUS": "Switch to the next conversation status",
+      "SWITCH_TO_PRIVATE_NOTE": "Switch to Private Note",
+      "TOGGLE_RICH_CONTENT_EDITOR": "Toggle Rich Content editor",
+      "SWITCH_TO_REPLY": "Switch to Reply",
+      "TOGGLE_SNOOZE_DROPDOWN": "Toggle snooze dropdown"
+    },
+    "KEYS": {
+      "WINDOWS_KEY_AND_COMMAND_KEY": "Win / ⌘",
+      "ALT_OR_OPTION_KEY": "Alt / ⌥",
+      "FORWARD_SLASH_KEY": "/"
     }
   }
 }

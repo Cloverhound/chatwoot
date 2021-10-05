@@ -15,20 +15,24 @@ class Messages::MessageBuilder
 
   def perform
     @message = @conversation.messages.build(message_params)
-    if @attachments.present?
-      @attachments.each do |uploaded_attachment|
-        attachment = @message.attachments.new(
-          account_id: @message.account_id,
-          file_type: file_type(uploaded_attachment&.content_type)
-        )
-        attachment.file.attach(uploaded_attachment)
-      end
-    end
-    @message.save
+    process_attachments
+    @message.save!
     @message
   end
 
   private
+
+  def process_attachments
+    return if @attachments.blank?
+
+    @attachments.each do |uploaded_attachment|
+      @message.attachments.build(
+        account_id: @message.account_id,
+        file_type: file_type(uploaded_attachment&.content_type),
+        file: uploaded_attachment
+      )
+    end
+  end
 
   def message_type
     if @conversation.inbox.channel_type != 'Channel::Api' && @message_type == 'incoming'
@@ -39,7 +43,17 @@ class Messages::MessageBuilder
   end
 
   def sender
-    message_type == 'outgoing' ? @user : @conversation.contact
+    message_type == 'outgoing' ? (message_sender || @user) : @conversation.contact
+  end
+
+  def external_created_at
+    @params[:external_created_at].present? ? { external_created_at: @params[:external_created_at] } : {}
+  end
+
+  def message_sender
+    return if @params[:sender_type] != 'AgentBot'
+
+    AgentBot.where(account_id: [nil, @conversation.account.id]).find_by(id: @params[:sender_id])
   end
 
   def message_params
@@ -54,6 +68,6 @@ class Messages::MessageBuilder
       items: @items,
       in_reply_to: @in_reply_to,
       echo_id: @params[:echo_id]
-    }
+    }.merge(external_created_at)
   end
 end

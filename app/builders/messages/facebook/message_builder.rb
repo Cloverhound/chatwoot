@@ -13,15 +13,22 @@ class Messages::Facebook::MessageBuilder
     @outgoing_echo = outgoing_echo
     @sender_id = (@outgoing_echo ? @response.recipient_id : @response.sender_id)
     @message_type = (@outgoing_echo ? :outgoing : :incoming)
+    @attachments = (@response.attachments || [])
   end
 
   def perform
+    # This channel might require reauthorization, may be owner might have changed the fb password
+    return if @inbox.channel.reauthorization_required?
+
     ActiveRecord::Base.transaction do
       build_contact
       build_message
     end
+    ensure_contact_avatar
+  rescue Koala::Facebook::AuthenticationError
+    Rails.logger.info "Facebook Authorization expired for Inbox #{@inbox.id}"
   rescue StandardError => e
-    Raven.capture_exception(e)
+    Sentry.capture_exception(e)
     true
   end
 
@@ -35,24 +42,40 @@ class Messages::Facebook::MessageBuilder
     return if contact.present?
 
     @contact = Contact.create!(contact_params.except(:remote_avatar_url))
-    ContactAvatarJob.perform_later(@contact, contact_params[:remote_avatar_url]) if contact_params[:remote_avatar_url]
     @contact_inbox = ContactInbox.create(contact: contact, inbox: @inbox, source_id: @sender_id)
   end
 
   def build_message
     @message = conversation.messages.create!(message_params)
-    (response.attachments || []).each do |attachment|
-      attachment_obj = @message.attachments.new(attachment_params(attachment).except(:remote_file_url))
-      attachment_obj.save!
-      attach_file(attachment_obj, attachment_params(attachment)[:remote_file_url]) if attachment_params(attachment)[:remote_file_url]
+    @attachments.each do |attachment|
+      process_attachment(attachment)
     end
   end
 
+  def process_attachment(attachment)
+    return if attachment['type'].to_sym == :template
+
+    attachment_obj = @message.attachments.new(attachment_params(attachment).except(:remote_file_url))
+    attachment_obj.save!
+    attach_file(attachment_obj, attachment_params(attachment)[:remote_file_url]) if attachment_params(attachment)[:remote_file_url]
+  end
+
   def attach_file(attachment, file_url)
-    file_resource = LocalResource.new(file_url)
-    attachment.file.attach(io: file_resource.file, filename: file_resource.filename, content_type: file_resource.encoding)
-  rescue *ExceptionList::URI_EXCEPTIONS => e
-    Rails.logger.info "invalid url #{file_url} : #{e.message}"
+    attachment_file = Down.download(
+      file_url
+    )
+    attachment.file.attach(
+      io: attachment_file,
+      filename: attachment_file.original_filename,
+      content_type: attachment_file.content_type
+    )
+  end
+
+  def ensure_contact_avatar
+    return if contact_params[:remote_avatar_url].blank?
+    return if @contact.avatar.attached?
+
+    ContactAvatarJob.perform_later(@contact, contact_params[:remote_avatar_url])
   end
 
   def conversation
@@ -125,18 +148,30 @@ class Messages::Facebook::MessageBuilder
     }
   end
 
-  def contact_params
-    begin
-      k = Koala::Facebook::API.new(@inbox.channel.page_access_token) if @inbox.facebook?
-      result = k.get_object(@sender_id) || {}
-    rescue StandardError => e
-      result = {}
-      Raven.capture_exception(e)
-    end
+  def process_contact_params_result(result)
     {
       name: "#{result['first_name'] || 'John'} #{result['last_name'] || 'Doe'}",
       account_id: @inbox.account_id,
       remote_avatar_url: result['profile_pic'] || ''
     }
+  end
+
+  def contact_params
+    begin
+      k = Koala::Facebook::API.new(@inbox.channel.page_access_token) if @inbox.facebook?
+      result = k.get_object(@sender_id) || {}
+    rescue Koala::Facebook::AuthenticationError
+      @inbox.channel.authorization_error!
+      raise
+    rescue Koala::Facebook::ClientError => e
+      result = {}
+      # OAuthException, code: 100, error_subcode: 2018218, message: (#100) No profile available for this user
+      # We don't need to capture this error as we don't care about contact params in case of echo messages
+      Sentry.capture_exception(e) unless outgoing_echo?
+    rescue StandardError => e
+      result = {}
+      Sentry.capture_exception(e)
+    end
+    process_contact_params_result(result)
   end
 end

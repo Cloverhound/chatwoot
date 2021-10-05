@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require Rails.root.join 'spec/models/concerns/assignment_handler_spec.rb'
-require Rails.root.join 'spec/models/concerns/round_robin_handler_spec.rb'
+require Rails.root.join 'spec/models/concerns/assignment_handler_shared.rb'
+require Rails.root.join 'spec/models/concerns/round_robin_handler_shared.rb'
 
 RSpec.describe Conversation, type: :model do
   describe 'associations' do
     it { is_expected.to belong_to(:account) }
+    it { is_expected.to belong_to(:inbox) }
   end
 
   describe 'concerns' do
@@ -93,7 +94,6 @@ RSpec.describe Conversation, type: :model do
 
       conversation.update(
         status: :resolved,
-        locked: true,
         contact_last_seen_at: Time.now,
         assignee: new_assignee,
         label_list: [label.title]
@@ -106,8 +106,6 @@ RSpec.describe Conversation, type: :model do
         .with(described_class::CONVERSATION_RESOLVED, kind_of(Time), conversation: conversation)
       expect(Rails.configuration.dispatcher).to have_received(:dispatch)
         .with(described_class::CONVERSATION_READ, kind_of(Time), conversation: conversation)
-      expect(Rails.configuration.dispatcher).to have_received(:dispatch)
-        .with(described_class::CONVERSATION_LOCK_TOGGLE, kind_of(Time), conversation: conversation)
       expect(Rails.configuration.dispatcher).to have_received(:dispatch)
         .with(described_class::ASSIGNEE_CHANGED, kind_of(Time), conversation: conversation)
     end
@@ -183,35 +181,37 @@ RSpec.describe Conversation, type: :model do
   end
 
   describe '#toggle_status' do
-    subject(:toggle_status) { conversation.toggle_status }
-
-    let(:conversation) { create(:conversation, status: :open) }
-
-    it 'toggles conversation status' do
-      expect(toggle_status).to eq(true)
+    it 'toggles conversation status to resolved when open' do
+      conversation = create(:conversation, status: 'open')
+      expect(conversation.toggle_status).to eq(true)
       expect(conversation.reload.status).to eq('resolved')
     end
-  end
 
-  describe '#lock!' do
-    subject(:lock!) { conversation.lock! }
+    it 'toggles conversation status to open when resolved' do
+      conversation = create(:conversation, status: 'resolved')
+      expect(conversation.toggle_status).to eq(true)
+      expect(conversation.reload.status).to eq('open')
+    end
 
-    let(:conversation) { create(:conversation) }
+    it 'toggles conversation status to open when pending' do
+      conversation = create(:conversation, status: 'pending')
+      expect(conversation.toggle_status).to eq(true)
+      expect(conversation.reload.status).to eq('open')
+    end
 
-    it 'assigns locks the conversation' do
-      expect(lock!).to eq(true)
-      expect(conversation.reload.locked).to eq(true)
+    it 'toggles conversation status to open when snoozed' do
+      conversation = create(:conversation, status: 'snoozed')
+      expect(conversation.toggle_status).to eq(true)
+      expect(conversation.reload.status).to eq('open')
     end
   end
 
-  describe '#unlock!' do
-    subject(:unlock!) { conversation.unlock! }
-
-    let(:conversation) { create(:conversation) }
-
-    it 'unlocks the conversation' do
-      expect(unlock!).to eq(true)
-      expect(conversation.reload.locked).to eq(false)
+  describe '#ensure_snooze_until_reset' do
+    it 'resets the snoozed_until when status is toggled' do
+      conversation = create(:conversation, status: 'snoozed', snoozed_until: 2.days.from_now)
+      expect(conversation.snoozed_until).not_to eq nil
+      expect(conversation.toggle_status).to eq(true)
+      expect(conversation.reload.snoozed_until).to eq(nil)
     end
   end
 
@@ -365,24 +365,21 @@ RSpec.describe Conversation, type: :model do
     end
   end
 
-  describe '#lock_event_data' do
-    subject(:lock_event_data) { conversation.lock_event_data }
-
-    let(:conversation) do
-      build(:conversation, display_id: 505, locked: false)
-    end
-
-    it 'returns lock event payload' do
-      expect(lock_event_data).to eq(id: 505, locked: false)
-    end
-  end
-
   describe '#botinbox: when conversation created inside inbox with agent bot' do
     let!(:bot_inbox) { create(:agent_bot_inbox) }
     let(:conversation) { create(:conversation, inbox: bot_inbox.inbox) }
 
-    it 'returns conversation status as bot' do
-      expect(conversation.status).to eq('bot')
+    it 'returns conversation status as pending' do
+      expect(conversation.status).to eq('pending')
+    end
+  end
+
+  describe '#botintegration: when conversation created in inbox with dialogflow integration' do
+    let(:hook) { create(:integrations_hook, :dialogflow) }
+    let(:conversation) { create(:conversation, inbox: hook.inbox) }
+
+    it 'returns conversation status as pending' do
+      expect(conversation.status).to eq('pending')
     end
   end
 
@@ -424,6 +421,17 @@ RSpec.describe Conversation, type: :model do
         )
         expect(conversation.can_reply?).to eq true
       end
+    end
+  end
+
+  describe '#delete conversation' do
+    let!(:conversation) { create(:conversation) }
+
+    let!(:notification) { create(:notification, notification_type: 'conversation_creation', primary_actor: conversation) }
+
+    it 'delete associated notifications if conversation is deleted' do
+      conversation.destroy
+      expect { notification.reload }.to raise_error ActiveRecord::RecordNotFound
     end
   end
 end

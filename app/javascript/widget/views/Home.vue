@@ -5,7 +5,7 @@
   >
     <spinner size="" />
   </div>
-  <div v-else class="home">
+  <div v-else class="home" @keydown.esc="closeChat">
     <div
       class="header-wrap bg-white"
       :class="{ expanded: !isHeaderCollapsed, collapsed: isHeaderCollapsed }"
@@ -34,6 +34,7 @@
         />
       </transition>
     </div>
+    <banner />
     <div class="flex flex-1 overflow-auto">
       <conversation-wrap
         v-if="currentView === 'messageView'"
@@ -53,10 +54,7 @@
         leave-class="opacity-100 transform translate-y-0"
         leave-to-class="opacity-0 transform "
       >
-        <div
-          v-if="showInputTextArea && currentView === 'messageView'"
-          class="input-wrap"
-        >
+        <div v-if="currentView === 'messageView'" class="input-wrap">
           <chat-footer />
         </div>
         <team-availability
@@ -71,15 +69,19 @@
 </template>
 
 <script>
-import Branding from 'widget/components/Branding.vue';
+import Branding from 'shared/components/Branding.vue';
 import ChatFooter from 'widget/components/ChatFooter.vue';
 import ChatHeaderExpanded from 'widget/components/ChatHeaderExpanded.vue';
 import ChatHeader from 'widget/components/ChatHeader.vue';
 import ConversationWrap from 'widget/components/ConversationWrap.vue';
+import { IFrameHelper } from 'widget/helpers/utils';
 import configMixin from '../mixins/configMixin';
 import TeamAvailability from 'widget/components/TeamAvailability';
 import Spinner from 'shared/components/Spinner.vue';
+import Banner from 'widget/components/Banner.vue';
 import { mapGetters } from 'vuex';
+import { MAXIMUM_FILE_UPLOAD_SIZE } from 'shared/constants/messages';
+import { BUS_EVENTS } from 'shared/constants/busEvents';
 import PreChatForm from '../components/PreChat/Form';
 export default {
   name: 'Home',
@@ -92,6 +94,7 @@ export default {
     PreChatForm,
     Spinner,
     TeamAvailability,
+    Banner,
   },
   mixins: [configMixin],
   props: {
@@ -105,7 +108,10 @@ export default {
     },
   },
   data() {
-    return { isOnCollapsedView: false };
+    return {
+      isOnCollapsedView: false,
+      isOnNewConversation: false,
+    };
   },
   computed: {
     ...mapGetters({
@@ -122,7 +128,10 @@ export default {
         if (this.conversationSize) {
           return 'messageView';
         }
-        if (this.preChatFormEnabled && !currentUserEmail) {
+        if (
+          this.isOnNewConversation ||
+          (this.preChatFormEnabled && !currentUserEmail)
+        ) {
           return 'preChatFormView';
         }
         return 'messageView';
@@ -132,14 +141,8 @@ export default {
     isOpen() {
       return this.conversationAttributes.status === 'open';
     },
-    showInputTextArea() {
-      if (this.hideInputForBotConversations) {
-        if (this.isOpen) {
-          return true;
-        }
-        return false;
-      }
-      return true;
+    fileUploadSizeLimit() {
+      return MAXIMUM_FILE_UPLOAD_SIZE;
     },
     isHeaderCollapsed() {
       if (!this.hasIntroText || this.conversationSize) {
@@ -154,9 +157,18 @@ export default {
       );
     },
   },
+  mounted() {
+    bus.$on(BUS_EVENTS.START_NEW_CONVERSATION, () => {
+      this.isOnCollapsedView = true;
+      this.isOnNewConversation = true;
+    });
+  },
   methods: {
     startConversation() {
       this.isOnCollapsedView = !this.isOnCollapsedView;
+    },
+    closeChat() {
+      IFrameHelper.sendMessage({ event: 'closeChat' });
     },
   },
 };
@@ -219,7 +231,7 @@ export default {
   }
 
   .input-wrap {
-    padding: 0 $space-normal;
+    padding: 0 $space-two;
   }
 }
 </style>

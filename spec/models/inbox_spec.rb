@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require Rails.root.join 'spec/models/concerns/out_of_offisable_spec.rb'
+require Rails.root.join 'spec/models/concerns/out_of_offisable_shared.rb'
 
 RSpec.describe Inbox do
   describe 'validations' do
@@ -84,6 +84,54 @@ RSpec.describe Inbox do
       it do
         expect(inbox.facebook?).to eq(false)
         expect(inbox.inbox_type).to eq('Website')
+      end
+    end
+  end
+
+  describe '#web_widget?' do
+    let(:inbox) do
+      FactoryBot.build(:inbox, channel: channel_val)
+    end
+
+    context 'when the channel type is Channel::WebWidget' do
+      let(:channel_val) { Channel::WebWidget.new }
+
+      it do
+        expect(inbox.web_widget?).to eq(true)
+        expect(inbox.inbox_type).to eq('Website')
+      end
+    end
+
+    context 'when the channel is not Channel::WebWidget' do
+      let(:channel_val) { Channel::Api.new }
+
+      it do
+        expect(inbox.web_widget?).to eq(false)
+        expect(inbox.inbox_type).to eq('API')
+      end
+    end
+  end
+
+  describe '#api?' do
+    let(:inbox) do
+      FactoryBot.build(:inbox, channel: channel_val)
+    end
+
+    context 'when the channel type is Channel::Api' do
+      let(:channel_val) { Channel::Api.new }
+
+      it do
+        expect(inbox.api?).to eq(true)
+        expect(inbox.inbox_type).to eq('API')
+      end
+    end
+
+    context 'when the channel is not Channel::Api' do
+      let(:channel_val) { Channel::FacebookPage.new }
+
+      it do
+        expect(inbox.api?).to eq(false)
+        expect(inbox.inbox_type).to eq('Facebook')
       end
     end
   end

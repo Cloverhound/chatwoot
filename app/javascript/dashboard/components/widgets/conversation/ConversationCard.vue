@@ -18,7 +18,7 @@
       size="40px"
     />
     <div class="conversation--details columns">
-      <span v-if="showInboxName" v-tooltip.bottom="inboxName" class="label">
+      <span v-if="showInboxName" class="label">
         <i :class="computedInboxClass" />
         {{ inboxName }}
       </span>
@@ -26,14 +26,21 @@
         {{ currentContact.name }}
       </h4>
       <p v-if="lastMessageInChat" class="conversation--message">
-        <i v-if="messageByAgent" class="ion-ios-undo message-from-agent"></i>
+        <i v-if="isMessagePrivate" class="ion-locked last-message-icon" />
+        <i v-else-if="messageByAgent" class="ion-ios-undo last-message-icon" />
+        <i
+          v-else-if="isMessageAnActivity"
+          class="ion-information-circled last-message-icon"
+        />
         <span v-if="lastMessageInChat.content">
           {{ parsedLastMessage }}
         </span>
-        <span v-else-if="!lastMessageInChat.attachments">{{ ` ` }}</span>
-        <span v-else>
+        <span v-else-if="lastMessageInChat.attachments">
           <i :class="`small-icon ${this.$t(`${attachmentIconKey}.ICON`)}`"></i>
           {{ this.$t(`${attachmentIconKey}.CONTENT`) }}
+        </span>
+        <span v-else>
+          {{ $t('CHAT_LIST.NO_CONTENT') }}
         </span>
       </p>
       <p v-else class="conversation--message">
@@ -142,8 +149,22 @@ export default {
       return messageType === MESSAGE_TYPE.OUTGOING;
     },
 
+    isMessageAnActivity() {
+      const lastMessage = this.lastMessageInChat;
+      const { message_type: messageType } = lastMessage;
+      return messageType === MESSAGE_TYPE.ACTIVITY;
+    },
+
+    isMessagePrivate() {
+      const lastMessage = this.lastMessageInChat;
+      const { private: isPrivate } = lastMessage;
+      return isPrivate;
+    },
+
     parsedLastMessage() {
-      return this.getPlainText(this.lastMessageInChat.content);
+      const { content_attributes: contentAttributes } = this.lastMessageInChat;
+      const { email: { subject } = {} } = contentAttributes || {};
+      return this.getPlainText(subject || this.lastMessageInChat.content);
     },
 
     chatInbox() {
@@ -159,7 +180,11 @@ export default {
     },
 
     showInboxName() {
-      return !this.hideInboxName && this.isInboxNameVisible;
+      return (
+        !this.hideInboxName &&
+        this.isInboxNameVisible &&
+        this.inboxesList.length > 1
+      );
     },
     inboxName() {
       const stateInbox = this.chatInbox;
@@ -185,6 +210,10 @@ export default {
 <style lang="scss" scoped>
 .conversation {
   align-items: center;
+
+  &:hover {
+    background: var(--color-background-light);
+  }
 }
 
 .has-inbox-name {
@@ -217,5 +246,10 @@ export default {
   .ion-earth {
     font-size: var(--font-size-mini);
   }
+}
+
+.last-message-icon {
+  color: var(--s-600);
+  font-size: var(--font-size-mini);
 }
 </style>

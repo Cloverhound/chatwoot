@@ -9,6 +9,7 @@
     "SEARCH_MESSAGES": "Sök meddelanden i konversationer",
     "SEARCH": {
       "TITLE": "Sök meddelanden",
+      "RESULT_TITLE": "Search Results",
       "LOADING_MESSAGE": "Tuggar data...",
       "PLACEHOLDER": "Skriv valfri text för att söka efter meddelanden",
       "NO_MATCHING_RESULTS": "No results found."
@@ -20,18 +21,34 @@
     "LOADING_CONVERSATIONS": "Laddar konversationer",
     "CANNOT_REPLY": "Du kan inte svara på grund av",
     "24_HOURS_WINDOW": "24 timmars meddelandebegränsning",
-    "LAST_INCOMING_TWEET": "Du svarar på den senast inkomna tweeten",
+    "TWILIO_WHATSAPP_CAN_REPLY": "You can only reply to this conversation using a template message due to",
+    "TWILIO_WHATSAPP_24_HOURS_WINDOW": "24 timmars meddelandebegränsning",
+    "SELECT_A_TWEET_TO_REPLY": "Please select a tweet to reply to.",
     "REPLYING_TO": "Du svarar:",
     "REMOVE_SELECTION": "Ta bort urval",
     "DOWNLOAD": "Hämta",
     "UPLOADING_ATTACHMENTS": "Laddar upp bilagor...",
+    "SUCCESS_DELETE_MESSAGE": "Message deleted successfully",
+    "FAIL_DELETE_MESSSAGE": "Couldn't delete message! Try again",
     "NO_RESPONSE": "Inget svar",
+    "RATING_TITLE": "Rating",
+    "FEEDBACK_TITLE": "Feedback",
     "HEADER": {
       "RESOLVE_ACTION": "Lös",
       "REOPEN_ACTION": "Återöppna",
+      "OPEN_ACTION": "Öppna",
       "OPEN": "Mer",
       "CLOSE": "Stäng",
       "DETAILS": "detaljer"
+    },
+    "RESOLVE_DROPDOWN": {
+      "MARK_PENDING": "Mark as pending",
+      "SNOOZE": {
+        "TITLE": "Snooze until",
+        "NEXT_REPLY": "Next reply",
+        "TOMORROW": "Tomorrow",
+        "NEXT_WEEK": "Next week"
+      }
     },
     "FOOTER": {
       "MSG_INPUT": "Skift + Enter för ny rad. Börja med '/' för att välja en svarsmall.",
@@ -46,17 +63,36 @@
       "TIP_FORMAT_ICON": "Visa textformaterare",
       "TIP_EMOJI_ICON": "Visa emoji-väljare",
       "TIP_ATTACH_ICON": "Bifoga filer",
-      "ENTER_TO_SEND": "Enter för att skicka"
+      "ENTER_TO_SEND": "Enter för att skicka",
+      "DRAG_DROP": "Drag and drop here to attach",
+      "EMAIL_HEAD": {
+        "ADD_BCC": "Add bcc",
+        "CC": {
+          "LABEL": "CC",
+          "PLACEHOLDER": "Emails separated by commas",
+          "ERROR": "Please enter valid email addresses"
+        },
+        "BCC": {
+          "LABEL": "BCC",
+          "PLACEHOLDER": "Emails separated by commas",
+          "ERROR": "Please enter valid email addresses"
+        }
+      }
     },
     "VISIBLE_TO_AGENTS": "Privat anteckning: Endast synlig för dig och ditt team",
     "CHANGE_STATUS": "Konversationsstatus ändrad",
     "CHANGE_AGENT": "Konversationstilldelning ändrad",
     "CHANGE_TEAM": "Conversation team changed",
+    "FILE_SIZE_LIMIT": "File exceeds the {MAXIMUM_FILE_UPLOAD_SIZE} attachment limit",
     "SENT_BY": "Skickat av:",
     "ASSIGNMENT": {
       "SELECT_AGENT": "Välj agent",
       "REMOVE": "Radera",
       "ASSIGN": "Tilldela"
+    },
+    "CONTEXT_MENU": {
+      "COPY": "Kopiera",
+      "DELETE": "Radera"
     }
   },
   "EMAIL_TRANSCRIPT": {
@@ -101,11 +137,25 @@
     }
   },
   "CONVERSATION_SIDEBAR": {
-    "DETAILS_TITLE": "Conversations Details",
     "ASSIGNEE_LABEL": "Assigned Agent",
+    "SELF_ASSIGN": "Assign to me",
     "TEAM_LABEL": "Assigned Team",
     "SELECT": {
       "PLACEHOLDER": "None"
+    },
+    "ACCORDION": {
+      "CONTACT_DETAILS": "Contact Details",
+      "CONVERSATION_ACTIONS": "Conversation Actions",
+      "CONVERSATION_LABELS": "Conversation Labels",
+      "CONVERSATION_INFO": "Conversation Information",
+      "CONTACT_ATTRIBUTES": "Contact Attributes",
+      "PREVIOUS_CONVERSATION": "Tidigare konversationer"
     }
+  },
+  "EMAIL_HEADER": {
+    "TO": "Till",
+    "BCC": "Bcc",
+    "CC": "Cc",
+    "SUBJECT": "Subject"
   }
 }

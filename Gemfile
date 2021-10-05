@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.7.2'
+ruby '3.0.2'
 
 ##-- base gems for rails --##
 gem 'rack-cors', require: 'rack/cors'
@@ -31,19 +31,24 @@ gem 'haikunator'
 gem 'liquid'
 # Parse Markdown to HTML
 gem 'commonmarker'
+# Validate Data against JSON Schema
+gem 'json_schemer'
+# Rack middleware for blocking & throttling abusive requests
+gem 'rack-attack'
+# a utility tool for streaming, flexible and safe downloading of remote files
+gem 'down', '~> 5.0'
 
 ##-- for active storage --##
 gem 'aws-sdk-s3', require: false
 gem 'azure-storage-blob', require: false
 gem 'google-cloud-storage', require: false
-gem 'mini_magick'
+gem 'image_processing'
 
 ##-- gems for database --#
 gem 'groupdate'
 gem 'pg'
 gem 'redis'
 gem 'redis-namespace'
-gem 'redis-rack-cache'
 # super fast record imports in bulk
 gem 'activerecord-import'
 
@@ -51,12 +56,14 @@ gem 'activerecord-import'
 gem 'dotenv-rails'
 gem 'foreman'
 gem 'puma'
+gem 'rack-timeout'
 gem 'webpacker', '~> 5.x'
 # metrics on heroku
 gem 'barnes'
 
 ##--- gems for authentication & authorization ---##
 gem 'devise'
+gem 'devise-secure_password', '~> 2.0', git: 'https://github.com/chatwoot/devise-secure_password'
 gem 'devise_token_auth'
 # authorization
 gem 'jwt'
@@ -70,8 +77,8 @@ gem 'wisper', '2.0.0'
 
 ##--- gems for channels ---##
 # TODO: bump up gem to 2.0
-gem 'facebook-messenger', '1.5.0'
-gem 'telegram-bot-ruby'
+gem 'facebook-messenger'
+gem 'line-bot-api'
 gem 'twilio-ruby', '~> 5.32.0'
 # twitty will handle subscription of twitter account events
 # gem 'twitty', git: 'https://github.com/chatwoot/twitty'
@@ -80,12 +87,20 @@ gem 'twitty'
 gem 'koala'
 # slack client
 gem 'slack-ruby-client'
+# for dialogflow integrations
+gem 'google-cloud-dialogflow'
 
 ##--- gems for debugging and error reporting ---##
 # static analysis
 gem 'brakeman'
+
+##-- apm and error monitoring ---#
+gem 'ddtrace'
+gem 'newrelic_rpm'
 gem 'scout_apm'
-gem 'sentry-raven'
+gem 'sentry-rails'
+gem 'sentry-ruby'
+gem 'sentry-sidekiq'
 
 ##-- background job processing --##
 gem 'sidekiq'
@@ -105,6 +120,8 @@ gem 'maxminddb'
 # to create db triggers
 gem 'hairtrigger'
 
+gem 'procore-sift'
+
 group :development do
   gem 'annotate'
   gem 'bullet'
@@ -112,7 +129,7 @@ group :development do
   gem 'web-console'
 
   # used in swagger build
-  gem 'json_refs', git: 'https://github.com/tzmfreedom/json_refs', ref: 'e32deb0'
+  gem 'json_refs'
 
   # When we want to squash migrations
   gem 'squasher'
@@ -126,21 +143,19 @@ group :test do
 end
 
 group :development, :test do
-  # locking until https://github.com/codeclimate/test-reporter/issues/418 is resolved
-  gem 'action-cable-testing'
+  gem 'active_record_query_trace'
   gem 'bundle-audit', require: false
   gem 'byebug', platform: :mri
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'listen'
-  gem 'mock_redis', git: 'https://github.com/sds/mock_redis', ref: '16d00789f0341a3aac35126c0ffe97a596753ff9'
+  gem 'mock_redis'
   gem 'pry-rails'
-  gem 'rspec-rails', '~> 4.0.0.beta2'
+  gem 'rspec-rails', '~> 5.0.0'
   gem 'rubocop', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
   gem 'rubocop-rspec', require: false
-  gem 'scss_lint', require: false
   gem 'seed_dump'
   gem 'shoulda-matchers'
   gem 'simplecov', '0.17.1', require: false

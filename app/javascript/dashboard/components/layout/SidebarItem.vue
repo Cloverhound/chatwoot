@@ -19,7 +19,7 @@
       <span
         v-if="showItem(menuItem)"
         class="child-icon ion-android-add-circle"
-        @click.prevent="newLinkClick"
+        @click.prevent="newLinkClick(menuItem)"
       />
     </a>
     <ul v-if="menuItem.hasSubMenu" class="nested vertical menu">
@@ -33,7 +33,7 @@
         <a href="#" :class="computedChildClass(child)">
           <div class="wrap">
             <i
-              v-if="computedInboxClass(child)"
+              v-if="menuItem.key === 'inbox'"
               class="inbox-icon"
               :class="computedInboxClass(child)"
             />
@@ -108,8 +108,14 @@ export default {
       if (!child.truncateLabel) return false;
       return child.label;
     },
-    newLinkClick() {
-      router.push({ name: 'settings_inbox_new', params: { page: 'new' } });
+    newLinkClick(item) {
+      if (item.newLinkRouteName) {
+        router.push({ name: item.newLinkRouteName, params: { page: 'new' } });
+      } else if (item.showModalForNewItem) {
+        if (item.modalName === 'AddLabel') {
+          this.$emit('add-label');
+        }
+      }
     },
     showItem(item) {
       return this.isAdmin && item.newLink !== undefined;

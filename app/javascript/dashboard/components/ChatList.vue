@@ -3,7 +3,6 @@
     <slot></slot>
     <div class="chat-list__top">
       <h1 class="page-title text-truncate" :title="pageTitle">
-        <woot-sidemenu-icon />
         {{ pageTitle }}
       </h1>
       <chat-filter @statusFilterChange="updateStatusType" />
@@ -20,7 +19,7 @@
       {{ $t('CHAT_LIST.LIST.404') }}
     </p>
 
-    <div class="conversations-list">
+    <div ref="activeConversation" class="conversations-list">
       <conversation-card
         v-for="chat in conversationList"
         :key="chat.id"
@@ -33,13 +32,14 @@
         <span class="spinner"></span>
       </div>
 
-      <div
+      <woot-button
         v-if="!hasCurrentPageEndReached && !chatListLoading"
-        class="clear button load-more-conversations"
+        variant="clear"
+        size="expanded"
         @click="fetchConversations"
       >
         {{ $t('CHAT_LIST.LOAD_MORE_CONVERSATIONS') }}
-      </div>
+      </woot-button>
 
       <p
         v-if="
@@ -62,8 +62,13 @@ import ChatFilter from './widgets/conversation/ChatFilter';
 import ChatTypeTabs from './widgets/ChatTypeTabs';
 import ConversationCard from './widgets/conversation/ConversationCard';
 import timeMixin from '../mixins/time';
+import eventListenerMixins from 'shared/mixins/eventListenerMixins';
 import conversationMixin from '../mixins/conversations';
 import wootConstants from '../constants';
+import {
+  hasPressedAltAndJKey,
+  hasPressedAltAndKKey,
+} from 'shared/helpers/KeyboardHelpers';
 
 export default {
   components: {
@@ -71,7 +76,7 @@ export default {
     ConversationCard,
     ChatFilter,
   },
-  mixins: [timeMixin, conversationMixin],
+  mixins: [timeMixin, conversationMixin, eventListenerMixins],
   props: {
     conversationInbox: {
       type: [String, Number],
@@ -94,6 +99,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      currentChat: 'getSelectedChat',
       chatLists: 'getAllConversations',
       mineChatsList: 'getMineChats',
       allChatList: 'getAllStatusChats',
@@ -117,7 +123,7 @@ export default {
       return this.$store.getters['inboxes/getInbox'](this.activeInbox);
     },
     currentPage() {
-      return this.$store.getters['conversationPage/getCurrentPage'](
+      return this.$store.getters['conversationPage/getCurrentPageFilter'](
         this.activeAssigneeTab
       );
     },
@@ -188,6 +194,50 @@ export default {
     });
   },
   methods: {
+    getKeyboardListenerParams() {
+      const allConversations = this.$refs.activeConversation.querySelectorAll(
+        'div.conversations-list div.conversation'
+      );
+      const activeConversation = this.$refs.activeConversation.querySelector(
+        'div.conversations-list div.conversation.active'
+      );
+      const activeConversationIndex = [...allConversations].indexOf(
+        activeConversation
+      );
+      const lastConversationIndex = allConversations.length - 1;
+      return {
+        allConversations,
+        activeConversation,
+        activeConversationIndex,
+        lastConversationIndex,
+      };
+    },
+    handleKeyEvents(e) {
+      if (hasPressedAltAndJKey(e)) {
+        const {
+          allConversations,
+          activeConversationIndex,
+        } = this.getKeyboardListenerParams();
+        if (activeConversationIndex === -1) {
+          allConversations[0].click();
+        }
+        if (activeConversationIndex >= 1) {
+          allConversations[activeConversationIndex - 1].click();
+        }
+      }
+      if (hasPressedAltAndKKey(e)) {
+        const {
+          allConversations,
+          activeConversationIndex,
+          lastConversationIndex,
+        } = this.getKeyboardListenerParams();
+        if (activeConversationIndex === -1) {
+          allConversations[lastConversationIndex].click();
+        } else if (activeConversationIndex < lastConversationIndex) {
+          allConversations[activeConversationIndex + 1].click();
+        }
+      }
+    },
     resetAndFetchData() {
       this.$store.dispatch('conversationPage/reset');
       this.$store.dispatch('emptyAllConversations');
@@ -200,6 +250,7 @@ export default {
     },
     updateAssigneeTab(selectedTab) {
       if (this.activeAssigneeTab !== selectedTab) {
+        bus.$emit('clearSearchInput');
         this.activeAssigneeTab = selectedTab;
         if (!this.currentPage) {
           this.fetchConversations();
@@ -217,7 +268,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '~dashboard/assets/scss/app.scss';
+@import '~dashboard/assets/scss/woot';
 .spinner {
   margin-top: var(--space-normal);
   margin-bottom: var(--space-normal);

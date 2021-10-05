@@ -19,6 +19,7 @@
         <contact-panel
           v-if="showContactPanel"
           :conversation-id="currentChat.id"
+          :inbox-id="currentChat.inbox_id"
           :on-toggle="onToggleContactPanel"
         />
       </div>
@@ -48,15 +49,20 @@ export default {
     },
     isContactPanelOpen: {
       type: Boolean,
-      default: false,
+      default: true,
     },
   },
   computed: {
-    ...mapGetters({
-      currentChat: 'getSelectedChat',
-    }),
+    ...mapGetters({ currentChat: 'getSelectedChat' }),
     showContactPanel() {
       return this.isContactPanelOpen && this.currentChat.id;
+    },
+  },
+  watch: {
+    'currentChat.inbox_id'(inboxId) {
+      if (inboxId) {
+        this.$store.dispatch('inboxAssignableAgents/fetch', { inboxId });
+      }
     },
   },
   methods: {
@@ -67,11 +73,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import '~dashboard/assets/scss/app.scss';
+@import '~dashboard/assets/scss/woot';
 
 .conversation-details-wrap {
   display: flex;
   flex-direction: column;
+  min-width: 0;
   width: 100%;
   border-left: 1px solid var(--color-border);
   background: var(--color-background-light);

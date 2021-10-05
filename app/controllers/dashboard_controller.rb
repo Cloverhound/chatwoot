@@ -21,7 +21,11 @@ class DashboardController < ActionController::Base
       'PRIVACY_URL',
       'DISPLAY_MANIFEST',
       'CREATE_NEW_ACCOUNT_FROM_DASHBOARD',
-      'CHATWOOT_INBOX_TOKEN'
+      'CHATWOOT_INBOX_TOKEN',
+      'API_CHANNEL_NAME',
+      'API_CHANNEL_THUMBNAIL',
+      'ANALYTICS_TOKEN',
+      'ANALYTICS_HOST'
     ).merge(
       APP_VERSION: Chatwoot.config[:version]
     )

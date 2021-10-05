@@ -3,6 +3,8 @@
     "LINK": "Configuració del Perfil",
     "TITLE": "Configuració del Perfil",
     "BTN_TEXT": "Actualització del Perfil",
+    "UPDATE_SUCCESS": "Your profile has been updated successfully",
+    "PASSWORD_UPDATE_SUCCESS": "La teva contrasenya ha estat canviada correctament",
     "AFTER_EMAIL_CHANGED": "El vostre perfil s'ha actualitzat correctament. Torneu a iniciar la sessió ja que les vostres credencials d'inici de sessió han canviat",
     "FORM": {
       "AVATAR": "Imatge del Perfil",
@@ -16,11 +18,19 @@
       },
       "PASSWORD_SECTION": {
         "TITLE": "Contrasenya",
-        "NOTE": "L'actualització de la contrasenya restableix els vostres inicis de sessió en múltiples dispositius."
+        "NOTE": "L'actualització de la contrasenya restableix els vostres inicis de sessió en múltiples dispositius.",
+        "BTN_TEXT": "Change password"
       },
       "ACCESS_TOKEN": {
         "TITLE": "Token d'accés",
         "NOTE": "Aquest token es pot utilitzar si creeu una integració basada en l'API"
+      },
+      "AUDIO_NOTIFICATIONS_SECTION": {
+        "TITLE": "Audio Notifications",
+        "NOTE": "Enable audio notifications in dashboard for new messages and conversations.",
+        "NONE": "None",
+        "ASSIGNED": "Assigned Conversations",
+        "ALL_CONVERSATIONS": "All Conversations"
       },
       "EMAIL_NOTIFICATIONS_SECTION": {
         "TITLE": "Notificacions per correu electrònic",
@@ -70,6 +80,11 @@
         "ERROR": "Introduïu una adreça de correu electrònic vàlida",
         "PLACEHOLDER": "Introduïu la vostra adreça de correu electrònic, que es mostrarà a les converses"
       },
+      "CURRENT_PASSWORD": {
+        "LABEL": "Current password",
+        "ERROR": "Please enter the current password",
+        "PLACEHOLDER": "Please enter the current password"
+      },
       "PASSWORD": {
         "LABEL": "Contrasenya",
         "ERROR": "Introduïu una contrasenya d'una longitud de 6 o més",
@@ -87,6 +102,7 @@
     "CHANGE_ACCOUNTS": "Canvia de compte",
     "SELECTOR_SUBTITLE": "Selecciona un compte de la llista següent",
     "PROFILE_SETTINGS": "Configuració del Perfil",
+    "KEYBOARD_SHORTCUTS": "Keyboard Shortcuts",
     "LOGOUT": "Sortir"
   },
   "APP_GLOBAL": {
@@ -115,8 +131,8 @@
   "SIDEBAR": {
     "CONVERSATIONS": "Converses",
     "REPORTS": "Informes",
-    "CONTACTS": "Contactes",
     "SETTINGS": "Configuracions",
+    "CONTACTS": "Contactes",
     "HOME": "Inici",
     "AGENTS": "Agents",
     "INBOXES": "Safates d'entrada",
@@ -124,10 +140,20 @@
     "CANNED_RESPONSES": "Respostes predeterminades",
     "INTEGRATIONS": "Integracions",
     "ACCOUNT_SETTINGS": "Configuració del compte",
+    "APPLICATIONS": "Applications",
     "LABELS": "Etiquetes",
-    "TEAMS": "Equips"
+    "ATTRIBUTES": "Attributes",
+    "TEAMS": "Equips",
+    "ALL_CONTACTS": "All Contacts",
+    "TAGGED_WITH": "Tagged with",
+    "REPORTS_OVERVIEW": "Overview",
+    "CSAT": "CSAT",
+    "CAMPAIGNS": "Campaigns",
+    "ONGOING": "Ongoing",
+    "ONE_OFF": "One off"
   },
   "CREATE_ACCOUNT": {
+    "NO_ACCOUNT_WARNING": "Uh oh! We could not find any Chatwoot accounts. Please create a new account to continue.",
     "NEW_ACCOUNT": "Compte nou",
     "SELECTOR_SUBTITLE": "Crear un compte nou",
     "API": {
@@ -141,6 +167,31 @@
         "PLACEHOLDER": "Wayne Enterprises"
       },
       "SUBMIT": "Envia"
+    }
+  },
+  "KEYBOARD_SHORTCUTS": {
+    "TITLE": {
+      "OPEN_CONVERSATION": "Open conversation",
+      "RESOLVE_AND_NEXT": "Resolve and move to next",
+      "NAVIGATE_DROPDOWN": "Navigate dropdown items",
+      "RESOLVE_CONVERSATION": "Resolve Conversation",
+      "GO_TO_CONVERSATION_DASHBOARD": "Go to Conversation Dashboard",
+      "ADD_ATTACHMENT": "Add Attachment",
+      "GO_TO_CONTACTS_DASHBOARD": "Go to Contacts Dashboard",
+      "TOGGLE_SIDEBAR": "Toggle Sidebar",
+      "GO_TO_REPORTS_SIDEBAR": "Go to Reports sidebar",
+      "MOVE_TO_NEXT_TAB": "Move to next tab in conversation list",
+      "GO_TO_SETTINGS": "Go to Settings",
+      "SWITCH_CONVERSATION_STATUS": "Switch to the next conversation status",
+      "SWITCH_TO_PRIVATE_NOTE": "Switch to Private Note",
+      "TOGGLE_RICH_CONTENT_EDITOR": "Toggle Rich Content editor",
+      "SWITCH_TO_REPLY": "Switch to Reply",
+      "TOGGLE_SNOOZE_DROPDOWN": "Toggle snooze dropdown"
+    },
+    "KEYS": {
+      "WINDOWS_KEY_AND_COMMAND_KEY": "Win / ⌘",
+      "ALT_OR_OPTION_KEY": "Alt / ⌥",
+      "FORWARD_SLASH_KEY": "/"
     }
   }
 }

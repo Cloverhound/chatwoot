@@ -47,8 +47,12 @@
         "VALUE": "resolved"
       },
       {
-        "TEXT": "رد آلي",
-        "VALUE": "bot"
+        "TEXT": "معلق",
+        "VALUE": "pending"
+      },
+      {
+        "TEXT": "غفوة",
+        "VALUE": "snoozed"
       }
     ],
     "ATTACHMENTS": {
@@ -80,6 +84,7 @@
     "RECEIVED_VIA_EMAIL": "تم تلقيه عبر البريد الإلكتروني",
     "VIEW_TWEET_IN_TWITTER": "عرض التغريدة في تويتر",
     "REPLY_TO_TWEET": "الرد على هذه التغريدة",
-    "NO_MESSAGES": "No Messages"
+    "NO_MESSAGES": "لا توجد رسائل",
+    "NO_CONTENT": "لم يتم العثور على محتوى"
   }
 }

@@ -8,28 +8,47 @@ class ActionCableConnector extends BaseActionCableConnector {
       'message.updated': this.onMessageUpdated,
       'conversation.typing_on': this.onTypingOn,
       'conversation.typing_off': this.onTypingOff,
-      'conversation.resolved': this.onStatusChange,
-      'conversation.opened': this.onStatusChange,
+      'conversation.status_changed': this.onStatusChange,
       'presence.update': this.onPresenceUpdate,
+      'contact.merged': this.onContactMerge,
     };
   }
+
+  static refreshConnector = pubsubToken => {
+    if (!pubsubToken || window.chatwootPubsubToken === pubsubToken) {
+      return;
+    }
+    window.chatwootPubsubToken = pubsubToken;
+    window.actionCable.disconnect();
+    window.actionCable = new ActionCableConnector(
+      window.WOOT_WIDGET,
+      window.chatwootPubsubToken
+    );
+  };
 
   onStatusChange = data => {
     this.app.$store.dispatch('conversationAttributes/update', data);
   };
 
   onMessageCreated = data => {
-    this.app.$store.dispatch('conversation/addMessage', data).then(() => {
-      window.bus.$emit('on-agent-message-recieved');
-    });
+    this.app.$store
+      .dispatch('conversation/addOrUpdateMessage', data)
+      .then(() => {
+        window.bus.$emit('on-agent-message-recieved');
+      });
   };
 
   onMessageUpdated = data => {
-    this.app.$store.dispatch('conversation/updateMessage', data);
+    this.app.$store.dispatch('conversation/addOrUpdateMessage', data);
   };
 
   onPresenceUpdate = data => {
     this.app.$store.dispatch('agent/updatePresence', data.users);
+  };
+
+  onContactMerge = data => {
+    const { pubsub_token: pubsubToken } = data;
+    ActionCableConnector.refreshConnector(pubsubToken);
   };
 
   onTypingOn = () => {
@@ -62,16 +81,7 @@ class ActionCableConnector extends BaseActionCableConnector {
   };
 }
 
-export const refreshActionCableConnector = pubsubToken => {
-  if (!pubsubToken || window.chatwootPubsubToken === pubsubToken) {
-    return;
-  }
-  window.chatwootPubsubToken = pubsubToken;
-  window.actionCable.disconnect();
-  window.actionCable = new ActionCableConnector(
-    window.WOOT_WIDGET,
-    window.chatwootPubsubToken
-  );
-};
+export const refreshActionCableConnector =
+  ActionCableConnector.refreshConnector;
 
 export default ActionCableConnector;

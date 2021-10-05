@@ -47,8 +47,12 @@
         "VALUE": "resolved"
       },
       {
-        "TEXT": "Bot",
-        "VALUE": "bot"
+        "TEXT": "Pending",
+        "VALUE": "pending"
+      },
+      {
+        "TEXT": "Snoozed",
+        "VALUE": "snoozed"
       }
     ],
     "ATTACHMENTS": {
@@ -80,6 +84,7 @@
     "RECEIVED_VIA_EMAIL": "E-mailen keresztül érkezett",
     "VIEW_TWEET_IN_TWITTER": "Üzenet megtekintése Twitteren",
     "REPLY_TO_TWEET": "Válasz",
-    "NO_MESSAGES": "Nincs üzenet"
+    "NO_MESSAGES": "Nincs üzenet",
+    "NO_CONTENT": "Nincs elérhető tartalom"
   }
 }

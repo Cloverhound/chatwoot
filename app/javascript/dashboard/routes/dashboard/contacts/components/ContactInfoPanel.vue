@@ -3,30 +3,55 @@
     <span class="close-button" @click="onClose">
       <i class="ion-android-close close-icon" />
     </span>
-    <contact-info :contact="contact" />
-    <contact-custom-attributes
-      v-if="hasContactAttributes"
-      :custom-attributes="contact.custom_attributes"
-    />
-    <contact-conversations
-      v-if="contact.id"
-      :contact-id="contact.id"
-      conversation-id=""
-    />
+    <contact-info show-new-message :contact="contact" />
+    <accordion-item
+      :title="$t('CONTACT_PANEL.SIDEBAR_SECTIONS.CUSTOM_ATTRIBUTES')"
+      :is-open="isContactSidebarItemOpen('is_ct_custom_attr_open')"
+      @click="value => toggleSidebarUIState('is_ct_custom_attr_open', value)"
+    >
+      <contact-custom-attributes
+        :custom-attributes="contact.custom_attributes"
+      />
+    </accordion-item>
+    <accordion-item
+      :title="$t('CONTACT_PANEL.SIDEBAR_SECTIONS.CONTACT_LABELS')"
+      :is-open="isContactSidebarItemOpen('is_ct_labels_open')"
+      @click="value => toggleSidebarUIState('is_ct_labels_open', value)"
+    >
+      <contact-label :contact-id="contact.id" class="contact-labels" />
+    </accordion-item>
+    <accordion-item
+      :title="$t('CONTACT_PANEL.SIDEBAR_SECTIONS.PREVIOUS_CONVERSATIONS')"
+      :is-open="isContactSidebarItemOpen('is_ct_prev_conv_open')"
+      @click="value => toggleSidebarUIState('is_ct_prev_conv_open', value)"
+    >
+      <contact-conversations
+        v-if="contact.id"
+        :contact-id="contact.id"
+        conversation-id=""
+      />
+    </accordion-item>
   </div>
 </template>
 
 <script>
+import AccordionItem from 'dashboard/components/Accordion/AccordionItem';
 import ContactConversations from 'dashboard/routes/dashboard/conversation/ContactConversations';
-import ContactInfo from 'dashboard/routes/dashboard/conversation/contact/ContactInfo';
 import ContactCustomAttributes from 'dashboard/routes/dashboard/conversation/ContactCustomAttributes';
+import ContactInfo from 'dashboard/routes/dashboard/conversation/contact/ContactInfo';
+import ContactLabel from 'dashboard/routes/dashboard/contacts/components/ContactLabels.vue';
+
+import uiSettingsMixin from 'dashboard/mixins/uiSettings';
 
 export default {
   components: {
-    ContactCustomAttributes,
+    AccordionItem,
     ContactConversations,
+    ContactCustomAttributes,
     ContactInfo,
+    ContactLabel,
   },
+  mixins: [uiSettingsMixin],
   props: {
     contact: {
       type: Object,
@@ -47,18 +72,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~dashboard/assets/scss/variables';
-@import '~dashboard/assets/scss/mixins';
-
+::v-deep {
+  .contact--profile {
+    padding-bottom: var(--space-slab);
+    margin-bottom: var(--space-normal);
+  }
+}
 .contact--panel {
-  @include border-normal-left;
-
+  height: 100%;
   background: white;
   font-size: var(--font-size-small);
   overflow-y: auto;
   overflow: auto;
   position: relative;
-  padding: var(--space-one);
+  border-left: 1px solid var(--color-border);
 }
 
 .close-button {
@@ -75,10 +102,6 @@ export default {
 
 .conversation--details {
   padding: 0 var(--space-normal);
-}
-
-.contact-conversation--panel {
-  height: 100%;
 }
 
 .contact--mute {

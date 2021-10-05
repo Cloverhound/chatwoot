@@ -3,6 +3,8 @@
     "LINK": "Ajustes del perfil",
     "TITLE": "Ajustes del perfil",
     "BTN_TEXT": "Actualizar perfil",
+    "UPDATE_SUCCESS": "Tu perfil se ha actualizado correctamente",
+    "PASSWORD_UPDATE_SUCCESS": "Su contraseña se ha cambiado correctamente",
     "AFTER_EMAIL_CHANGED": "Su perfil ha sido actualizado con éxito, por favor inicie sesión de nuevo cuando sus credenciales de inicio de sesión se hayan cambiado",
     "FORM": {
       "AVATAR": "Imagen de perfil",
@@ -16,15 +18,23 @@
       },
       "PASSWORD_SECTION": {
         "TITLE": "Contraseña",
-        "NOTE": "Actualizar su contraseña restablecería sus entradas en varios dispositivos."
+        "NOTE": "Actualizar tu contraseña restablecería tus entradas en varios dispositivos.",
+        "BTN_TEXT": "Cambiar contraseña"
       },
       "ACCESS_TOKEN": {
         "TITLE": "Token de acceso",
         "NOTE": "Este token puede ser usado si estás construyendo una integración basada en API"
       },
+      "AUDIO_NOTIFICATIONS_SECTION": {
+        "TITLE": "Notificaciones con sonido",
+        "NOTE": "Active las notificaciones de sonido en el tablero para los mensajes nuevos y conversaciones.",
+        "NONE": "Ninguna",
+        "ASSIGNED": "Assigned Conversations",
+        "ALL_CONVERSATIONS": "All Conversations"
+      },
       "EMAIL_NOTIFICATIONS_SECTION": {
-        "TITLE": "Notificaciones por correo",
-        "NOTE": "Actualice sus preferencias de notificación por correo electrónico aquí",
+        "TITLE": "Notificaciones por email",
+        "NOTE": "Actualiza tus preferencias de notificación por correo electrónico aquí",
         "CONVERSATION_ASSIGNMENT": "Enviar notificaciones por correo electrónico cuando se me ha asignado una conversación",
         "CONVERSATION_CREATION": "Enviar notificaciones por correo electrónico cuando se crea una nueva conversación",
         "CONVERSATION_MENTION": "Enviar notificaciones por correo electrónico cuando sea mencionado en una conversación",
@@ -41,7 +51,7 @@
         "CONVERSATION_CREATION": "Enviar notificaciones push cuando se crea una nueva conversación",
         "CONVERSATION_MENTION": "Enviar notificaciones push cuando sea mencionado en una conversación",
         "ASSIGNED_CONVERSATION_NEW_MESSAGE": "Enviar notificaciones push cuando un nuevo mensaja es creadao en una conversación asignada",
-        "HAS_ENABLED_PUSH": "Has habilitado notificaciones push para este navegador.",
+        "HAS_ENABLED_PUSH": "Ha habilitado notificaciones push para este navegador.",
         "REQUEST_PUSH": "Habilitar notificaciones push"
       },
       "PROFILE_IMAGE": {
@@ -66,9 +76,14 @@
         ]
       },
       "EMAIL": {
-        "LABEL": "Su dirección de correo",
+        "LABEL": "Tu dirección de correo",
         "ERROR": "Por favor, introduzca una dirección de correo válida",
         "PLACEHOLDER": "Por favor, introduzca su dirección de correo electrónico, esto se mostrará en las conversaciones"
+      },
+      "CURRENT_PASSWORD": {
+        "LABEL": "Contraseña actual",
+        "ERROR": "Por favor, introduzca su contraseña actual",
+        "PLACEHOLDER": "Por favor, introduzca su contraseña actual"
       },
       "PASSWORD": {
         "LABEL": "Contraseña",
@@ -87,6 +102,7 @@
     "CHANGE_ACCOUNTS": "Cambiar de cuenta",
     "SELECTOR_SUBTITLE": "Seleccione una cuenta de la siguiente lista",
     "PROFILE_SETTINGS": "Ajustes del perfil",
+    "KEYBOARD_SHORTCUTS": "Keyboard Shortcuts",
     "LOGOUT": "Cerrar sesión"
   },
   "APP_GLOBAL": {
@@ -115,8 +131,8 @@
   "SIDEBAR": {
     "CONVERSATIONS": "Conversaciones",
     "REPORTS": "Informes",
-    "CONTACTS": "Contactos",
     "SETTINGS": "Ajustes",
+    "CONTACTS": "Contactos",
     "HOME": "Inicio",
     "AGENTS": "Agentes",
     "INBOXES": "Entradas",
@@ -124,10 +140,20 @@
     "CANNED_RESPONSES": "Respuestas predefinidas",
     "INTEGRATIONS": "Integraciones",
     "ACCOUNT_SETTINGS": "Configuración de la cuenta",
+    "APPLICATIONS": "Aplicaciones",
     "LABELS": "Etiquetas",
-    "TEAMS": "Equipos"
+    "ATTRIBUTES": "Attributes",
+    "TEAMS": "Equipos",
+    "ALL_CONTACTS": "Todos los contactos",
+    "TAGGED_WITH": "Etiquetado con",
+    "REPORTS_OVERVIEW": "Overview",
+    "CSAT": "CSAT",
+    "CAMPAIGNS": "Campañas",
+    "ONGOING": "Ongoing",
+    "ONE_OFF": "One off"
   },
   "CREATE_ACCOUNT": {
+    "NO_ACCOUNT_WARNING": "Uh oh! We could not find any Chatwoot accounts. Please create a new account to continue.",
     "NEW_ACCOUNT": "Nueva cuenta",
     "SELECTOR_SUBTITLE": "Crear nueva cuenta",
     "API": {
@@ -141,6 +167,31 @@
         "PLACEHOLDER": "Empresas de Wayne"
       },
       "SUBMIT": "Enviar"
+    }
+  },
+  "KEYBOARD_SHORTCUTS": {
+    "TITLE": {
+      "OPEN_CONVERSATION": "Open conversation",
+      "RESOLVE_AND_NEXT": "Resolve and move to next",
+      "NAVIGATE_DROPDOWN": "Navigate dropdown items",
+      "RESOLVE_CONVERSATION": "Resolve Conversation",
+      "GO_TO_CONVERSATION_DASHBOARD": "Go to Conversation Dashboard",
+      "ADD_ATTACHMENT": "Add Attachment",
+      "GO_TO_CONTACTS_DASHBOARD": "Go to Contacts Dashboard",
+      "TOGGLE_SIDEBAR": "Toggle Sidebar",
+      "GO_TO_REPORTS_SIDEBAR": "Go to Reports sidebar",
+      "MOVE_TO_NEXT_TAB": "Move to next tab in conversation list",
+      "GO_TO_SETTINGS": "Go to Settings",
+      "SWITCH_CONVERSATION_STATUS": "Switch to the next conversation status",
+      "SWITCH_TO_PRIVATE_NOTE": "Switch to Private Note",
+      "TOGGLE_RICH_CONTENT_EDITOR": "Toggle Rich Content editor",
+      "SWITCH_TO_REPLY": "Switch to Reply",
+      "TOGGLE_SNOOZE_DROPDOWN": "Toggle snooze dropdown"
+    },
+    "KEYS": {
+      "WINDOWS_KEY_AND_COMMAND_KEY": "Win / ⌘",
+      "ALT_OR_OPTION_KEY": "Alt / ⌥",
+      "FORWARD_SLASH_KEY": "/"
     }
   }
 }

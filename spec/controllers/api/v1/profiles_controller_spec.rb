@@ -13,7 +13,7 @@ RSpec.describe 'Profile API', type: :request do
     end
 
     context 'when it is an authenticated user' do
-      let(:agent) { create(:user, account: account, role: :agent) }
+      let(:agent) { create(:user, account: account, custom_attributes: { test: 'test' }, role: :agent) }
 
       it 'returns current user information' do
         get '/api/v1/profile',
@@ -25,6 +25,7 @@ RSpec.describe 'Profile API', type: :request do
         expect(json_response['id']).to eq(agent.id)
         expect(json_response['email']).to eq(agent.email)
         expect(json_response['access_token']).to eq(agent.access_token.token)
+        expect(json_response['custom_attributes']['test']).to eq('test')
       end
     end
   end
@@ -39,12 +40,12 @@ RSpec.describe 'Profile API', type: :request do
     end
 
     context 'when it is an authenticated user' do
-      let(:agent) { create(:user, account: account, role: :agent) }
+      let(:agent) { create(:user, password: 'Test123!', account: account, role: :agent) }
 
       it 'updates the name & email' do
         new_email = Faker::Internet.email
         put '/api/v1/profile',
-            params: { profile: { name: 'test', 'email': new_email } },
+            params: { profile: { name: 'test', email: new_email } },
             headers: agent.create_new_auth_token,
             as: :json
 
@@ -56,13 +57,23 @@ RSpec.describe 'Profile API', type: :request do
         expect(agent.email).to eq(new_email)
       end
 
-      it 'updates the password' do
+      it 'updates the password when current password is provided' do
         put '/api/v1/profile',
-            params: { profile: { password: 'test123', password_confirmation: 'test123' } },
+            params: { profile: { current_password: 'Test123!', password: 'Test1234!', password_confirmation: 'Test1234!' } },
             headers: agent.create_new_auth_token,
             as: :json
 
         expect(response).to have_http_status(:success)
+        expect(agent.reload.valid_password?('Test1234!')).to eq true
+      end
+
+      it 'throws error when current password provided is invalid' do
+        put '/api/v1/profile',
+            params: { profile: { current_password: 'Test', password: 'test123', password_confirmation: 'test123' } },
+            headers: agent.create_new_auth_token,
+            as: :json
+
+        expect(response).to have_http_status(:unprocessable_entity)
       end
 
       it 'updates avatar' do

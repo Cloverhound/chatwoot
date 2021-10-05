@@ -1,6 +1,9 @@
 <template>
   <header class="header-expanded bg-white py-8 px-6 relative box-border w-full">
-    <div class="flex justify-between items-start">
+    <div
+      class="flex items-start"
+      :class="[avatarUrl ? 'justify-between' : 'justify-end']"
+    >
       <img v-if="avatarUrl" class="logo" :src="avatarUrl" />
       <header-actions :show-popout-button="showPopoutButton" />
     </div>
@@ -49,10 +52,13 @@ export default {
 <style scoped lang="scss">
 @import '~widget/assets/scss/mixins.scss';
 
+$logo-size: 56px;
+
 .header-expanded {
   .logo {
-    width: 56px;
-    height: 56px;
+    width: $logo-size;
+    height: $logo-size;
+    border-radius: $logo-size;
   }
 }
 </style>

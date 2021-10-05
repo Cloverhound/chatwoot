@@ -29,6 +29,11 @@ fr:
       failed: L'inscription a échoué
   reports:
     period: Période de rapport %{since} à %{until}
+    agent_csv:
+      agent_name: Nom de l'agent
+      conversations_count: Nombre de conversations
+      avg_first_response_time: Temps de réponse moyen (Minutes)
+      avg_resolution_time: Temps moyen de résolution (Minutes)
   notifications:
     notification_title:
       conversation_creation: "[Nouvelle conversation] - #%{display_id} a été créé dans %{inbox_name}"
@@ -42,6 +47,8 @@ fr:
       status:
         resolved: "La conversation a été marquée résolue par %{user_name}"
         open: "La conversation a été ré-ouverte par %{user_name}"
+        pending: "Conversation was marked as pending by %{user_name}"
+        snoozed: "Conversation was snoozed by %{user_name}"
         auto_resolved: "La conversation a été marquée comme résolue par le système en raison de %{duration} jours d'inactivité"
       assignee:
         self_assigned: "%{user_name} s'est auto-assigné cette conversation"
@@ -60,9 +67,12 @@ fr:
       greeting_message_body: "%{account_name} répond généralement en quelques heures."
       ways_to_reach_you_message_body: "Donnez à l'équipe un moyen de vous recontacter."
       email_input_box_message_body: "Recevez des notifications par courriel"
+      csat_input_message_body: "Veuillez évaluer la conversation"
     reply:
       email_subject: "Nouveaux messages dans cette conversation"
       transcript_subject: "Transcription de conversation"
+    survey:
+      response: "Please rate this conversation, %{link}"
   integration_apps:
     slack:
       name: "Slack"
@@ -70,3 +80,9 @@ fr:
     webhooks:
       name: "Webhooks"
       description: "Les événements Webhook vous fournissent des informations en temps réel sur ce qui se passe dans votre compte. Vous pouvez utiliser les webhooks pour communiquer les événements à vos applications préférées comme Slack ou Github. Cliquez sur Configurer pour configurer vos webhooks."
+    dialogflow:
+      name: "Dialogflow"
+      description: "Construisez des chatbots en utilisant Dialogflow et connectez-les à votre boîte de réception rapidement. Laissez les bots s'occuper des requêtes avant de les transmettre à un agent de service à la clientèle."
+    fullcontact:
+      name: "Fullcontact"
+      description: "L'intégration FullContact permet d'enrichir les profils de visiteurs. Identifiez les utilisateurs dès qu'ils partagent leur adresse de courriel et offrez-leur un service client sur mesure. Connectez FullContact à votre compte en partageant la clé API FullContact."

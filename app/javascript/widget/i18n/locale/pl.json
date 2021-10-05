@@ -10,7 +10,7 @@
   },
   "TEAM_AVAILABILITY": {
     "ONLINE": "Jesteśmy dostępni",
-    "OFFLINE": "Jesteśmy offline"
+    "OFFLINE": "W tej chwili jesteśmy niedostępni"
   },
   "REPLY_TIME": {
     "IN_A_FEW_MINUTES": "Zwykle odpowiadamy w ciągu paru minut",
@@ -18,9 +18,12 @@
     "IN_A_DAY": "Zwykle odpowiadamy w przeciągu jednego dnia"
   },
   "START_CONVERSATION": "Rozpocznij rozmowę",
+  "START_NEW_CONVERSATION": "Start a new conversation",
   "UNREAD_VIEW": {
     "VIEW_MESSAGES_BUTTON": "Pokaż nowe wiadomości",
-    "CLOSE_MESSAGES_BUTTON": "Zamknij"
+    "CLOSE_MESSAGES_BUTTON": "Zamknij",
+    "COMPANY_FROM": "from",
+    "BOT": "Bot"
   },
   "BUBBLE": {
     "LABEL": "Porozmawiaj z nami"
@@ -34,19 +37,35 @@
     "FIELDS": {
       "FULL_NAME": {
         "LABEL": "Pełna nazwa (imię i nazwisko)",
-        "PLACEHOLDER": "Please enter your full name",
-        "ERROR": "Full Name is required"
+        "PLACEHOLDER": "Podaj swoje imię i nazwisko",
+        "ERROR": "Pełne imię i nazwisko jest wymagane"
       },
       "EMAIL_ADDRESS": {
         "LABEL": "Adres e-mail",
-        "PLACEHOLDER": "Please enter your email address",
-        "ERROR": "Invalid email address"
+        "PLACEHOLDER": "Wprowadź swój adres e-mail",
+        "ERROR": "Nieprawidłowy adres e-mail"
       },
       "MESSAGE": {
-        "LABEL": "Message",
-        "PLACEHOLDER": "Please enter your message",
-        "ERROR": "Message too short"
+        "LABEL": "Wiadomość",
+        "PLACEHOLDER": "Wprowadź swoją wiadomość",
+        "ERROR": "Wiadomość za krótka"
       }
     }
+  },
+  "FILE_SIZE_LIMIT": "Plik przekracza limit {MAXIMUM_FILE_UPLOAD_SIZE} dla załącznika",
+  "CHAT_FORM": {
+    "INVALID": {
+      "FIELD": "Invalid field"
+    }
+  },
+  "CSAT": {
+    "TITLE": "Rate your conversation",
+    "SUBMITTED_TITLE": "Thank you for submitting the rating",
+    "PLACEHOLDER": "Tell us more..."
+  },
+  "EMAIL_TRANSCRIPT": {
+    "BUTTON_TEXT": "Request a conversation transcript",
+    "SEND_EMAIL_SUCCESS": "Transkrypcja czatu została wysłana pomyślnie",
+    "SEND_EMAIL_ERROR": "Wystąpił błąd, spróbuj ponownie"
   }
 }

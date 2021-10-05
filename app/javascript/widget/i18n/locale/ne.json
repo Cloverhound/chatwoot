@@ -10,7 +10,7 @@
   },
   "TEAM_AVAILABILITY": {
     "ONLINE": "हामी अनलाइन छौं",
-    "OFFLINE": "हामी अफलाईन छौं"
+    "OFFLINE": "We are away at the moment"
   },
   "REPLY_TIME": {
     "IN_A_FEW_MINUTES": "धेरै जसो केहि मिनेटमा जवाफ हुन्छ",
@@ -18,9 +18,12 @@
     "IN_A_DAY": "धेरै जसो एक दिनमा जवाफ हुन्छ"
   },
   "START_CONVERSATION": "कुराकानी सुरु गर्नुहोस्",
+  "START_NEW_CONVERSATION": "Start a new conversation",
   "UNREAD_VIEW": {
     "VIEW_MESSAGES_BUTTON": "नयाँ सन्देशहरू हेर्नुहोस्",
-    "CLOSE_MESSAGES_BUTTON": "बन्दा गार्नुहोस्"
+    "CLOSE_MESSAGES_BUTTON": "बन्दा गार्नुहोस्",
+    "COMPANY_FROM": "from",
+    "BOT": "Bot"
   },
   "BUBBLE": {
     "LABEL": "हामीसँग कुराकानी गर्नुहोस्"
@@ -48,5 +51,21 @@
         "ERROR": "Message too short"
       }
     }
+  },
+  "FILE_SIZE_LIMIT": "File exceeds the {MAXIMUM_FILE_UPLOAD_SIZE} attachment limit",
+  "CHAT_FORM": {
+    "INVALID": {
+      "FIELD": "Invalid field"
+    }
+  },
+  "CSAT": {
+    "TITLE": "Rate your conversation",
+    "SUBMITTED_TITLE": "Thank you for submitting the rating",
+    "PLACEHOLDER": "Tell us more..."
+  },
+  "EMAIL_TRANSCRIPT": {
+    "BUTTON_TEXT": "Request a conversation transcript",
+    "SEND_EMAIL_SUCCESS": "The chat transcript was sent successfully",
+    "SEND_EMAIL_ERROR": "There was an error, please try again"
   }
 }

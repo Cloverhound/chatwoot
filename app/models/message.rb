@@ -29,6 +29,7 @@
 #
 
 class Message < ApplicationRecord
+  include MessageFilterHelpers
   NUMBER_OF_PERMITTED_ATTACHMENTS = 15
 
   validates :account_id, presence: true
@@ -49,13 +50,17 @@ class Message < ApplicationRecord
     cards: 5,
     form: 6,
     article: 7,
-    incoming_email: 8
+    incoming_email: 8,
+    input_csat: 9
   }
   enum status: { sent: 0, delivered: 1, read: 2, failed: 3 }
   # [:submitted_email, :items, :submitted_values] : Used for bot message types
   # [:email] : Used by conversation_continuity incoming email messages
   # [:in_reply_to] : Used to reply to a particular tweet in threads
-  store :content_attributes, accessors: [:submitted_email, :items, :submitted_values, :email, :in_reply_to, :deleted], coder: JSON
+  # [:deleted] : Used to denote whether the message was deleted by the agent
+  # [:external_created_at] : Can specify if the message was created at a different timestamp externally
+  store :content_attributes, accessors: [:submitted_email, :items, :submitted_values, :email, :in_reply_to, :deleted,
+                                         :external_created_at], coder: JSON
 
   store :external_source_ids, accessors: [:slack], coder: JSON, prefix: :external_source_id
 
@@ -75,13 +80,11 @@ class Message < ApplicationRecord
   belongs_to :sender, polymorphic: true, required: false
 
   has_many :attachments, dependent: :destroy, autosave: true, before_add: :validate_attachments_limit
-
-  after_create :reopen_conversation,
-               :notify_via_mail
+  has_one :csat_survey_response, dependent: :destroy
 
   after_create_commit :execute_after_create_commit_callbacks
 
-  after_update :dispatch_update_event
+  after_update_commit :dispatch_update_event
 
   def channel_token
     @token ||= inbox.channel.try(:page_access_token)
@@ -100,12 +103,8 @@ class Message < ApplicationRecord
 
   def merge_sender_attributes(data)
     data.merge!(sender: sender.push_event_data) if sender && !sender.is_a?(AgentBot)
-    data.merge!(sender: sender.push_event_data(inbox)) if sender&.is_a?(AgentBot)
+    data.merge!(sender: sender.push_event_data(inbox)) if sender.is_a?(AgentBot)
     data
-  end
-
-  def reportable?
-    incoming? || outgoing?
   end
 
   def webhook_data
@@ -125,14 +124,28 @@ class Message < ApplicationRecord
     }
   end
 
+  def content
+    # move this to a presenter
+    return self[:content] if !input_csat? || inbox.web_widget?
+
+    I18n.t('conversations.survey.response', link: "#{ENV['FRONTEND_URL']}/survey/responses/#{conversation.uuid}")
+  end
+
   private
 
   def execute_after_create_commit_callbacks
     # rails issue with order of active record callbacks being executed https://github.com/rails/rails/issues/20911
+    reopen_conversation
+    notify_via_mail
     set_conversation_activity
     dispatch_create_events
     send_reply
     execute_message_template_hooks
+    update_contact_activity
+  end
+
+  def update_contact_activity
+    sender.update(last_activity_at: DateTime.now) if sender.is_a?(Contact)
   end
 
   def dispatch_create_events
@@ -148,11 +161,16 @@ class Message < ApplicationRecord
   end
 
   def send_reply
-    ::SendReplyJob.perform_later(id)
+    # FIXME: Giving it few seconds for the attachment to be uploaded to the service
+    # active storage attaches the file only after commit
+    attachments.blank? ? ::SendReplyJob.perform_later(id) : ::SendReplyJob.set(wait: 2.seconds).perform_later(id)
   end
 
   def reopen_conversation
-    conversation.open! if incoming? && conversation.resolved? && !conversation.muted?
+    return if conversation.muted?
+    return unless incoming?
+
+    conversation.open! if conversation.resolved? || conversation.snoozed?
   end
 
   def execute_message_template_hooks
@@ -160,7 +178,7 @@ class Message < ApplicationRecord
   end
 
   def email_notifiable_message?
-    return false unless outgoing?
+    return false unless outgoing? || input_csat?
     return false if private?
 
     true

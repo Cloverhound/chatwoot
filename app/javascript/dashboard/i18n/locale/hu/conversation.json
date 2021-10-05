@@ -9,9 +9,10 @@
     "SEARCH_MESSAGES": "Üzenetek keresése a beszélgetésekben",
     "SEARCH": {
       "TITLE": "Üzenetekben keresés",
+      "RESULT_TITLE": "Search Results",
       "LOADING_MESSAGE": "Adatelemzés...",
       "PLACEHOLDER": "Írj be szöveget hogy keress az üzenetek közt",
-      "NO_MATCHING_RESULTS": "No results found."
+      "NO_MATCHING_RESULTS": "Nincs találat."
     },
     "UNREAD_MESSAGES": "Olvasatlan üzenetek",
     "UNREAD_MESSAGE": "Olvasatlan üzenet",
@@ -20,18 +21,34 @@
     "LOADING_CONVERSATIONS": "Beszélgetések betöltése",
     "CANNOT_REPLY": "Nem tudunk válaszolni, mivel",
     "24_HOURS_WINDOW": "24 órás üzeneti ablak megkötés",
-    "LAST_INCOMING_TWEET": "Az utolsó beérkező tweetre válaszolsz",
+    "TWILIO_WHATSAPP_CAN_REPLY": "Erre a beszélgetésre csak konzerv válasszal válaszolhatsz, mert",
+    "TWILIO_WHATSAPP_24_HOURS_WINDOW": "24 órás üzeneti ablak megkötés",
+    "SELECT_A_TWEET_TO_REPLY": "Please select a tweet to reply to.",
     "REPLYING_TO": "Neki válaszolsz:",
     "REMOVE_SELECTION": "Kijelölés törlése",
     "DOWNLOAD": "Letöltés",
     "UPLOADING_ATTACHMENTS": "Csatolt fileok feltöltése...",
+    "SUCCESS_DELETE_MESSAGE": "Message deleted successfully",
+    "FAIL_DELETE_MESSSAGE": "Couldn't delete message! Try again",
     "NO_RESPONSE": "Nincs válasz",
+    "RATING_TITLE": "Rating",
+    "FEEDBACK_TITLE": "Feedback",
     "HEADER": {
       "RESOLVE_ACTION": "Megoldva",
       "REOPEN_ACTION": "Újranyitás",
+      "OPEN_ACTION": "Megnyitás",
       "OPEN": "Tovább",
       "CLOSE": "Bezárás",
       "DETAILS": "részletek"
+    },
+    "RESOLVE_DROPDOWN": {
+      "MARK_PENDING": "Mark as pending",
+      "SNOOZE": {
+        "TITLE": "Snooze until",
+        "NEXT_REPLY": "Next reply",
+        "TOMORROW": "Tomorrow",
+        "NEXT_WEEK": "Next week"
+      }
     },
     "FOOTER": {
       "MSG_INPUT": "Shift + enter új sorért. Kezdj a '/'-el mentett válasz kiválasztásához.",
@@ -46,17 +63,36 @@
       "TIP_FORMAT_ICON": "Rich szövegszerkesztő mutatása",
       "TIP_EMOJI_ICON": "Emoji választó mutatása",
       "TIP_ATTACH_ICON": "Fileok csatolása",
-      "ENTER_TO_SEND": "Enter-rel elküld"
+      "ENTER_TO_SEND": "Enter-rel elküld",
+      "DRAG_DROP": "Drag and drop here to attach",
+      "EMAIL_HEAD": {
+        "ADD_BCC": "Add bcc",
+        "CC": {
+          "LABEL": "CC",
+          "PLACEHOLDER": "Emails separated by commas",
+          "ERROR": "Please enter valid email addresses"
+        },
+        "BCC": {
+          "LABEL": "BCC",
+          "PLACEHOLDER": "Emails separated by commas",
+          "ERROR": "Please enter valid email addresses"
+        }
+      }
     },
     "VISIBLE_TO_AGENTS": "Privát megjegyzés: csak Neked és a csapat tagjainak látható",
     "CHANGE_STATUS": "A beszélgetés státusza megváltozott",
     "CHANGE_AGENT": "Hozzárendelt ügynök megváltoztatva",
-    "CHANGE_TEAM": "Conversation team changed",
+    "CHANGE_TEAM": "A beszélgetés csapata megváltozott",
+    "FILE_SIZE_LIMIT": "A file mérete meghaladja a {MAXIMUM_FILE_UPLOAD_SIZE} limitet",
     "SENT_BY": "Küldő:",
     "ASSIGNMENT": {
       "SELECT_AGENT": "Ügynök kiválasztása",
       "REMOVE": "Eltávolítás",
       "ASSIGN": "Hozzárendelés"
+    },
+    "CONTEXT_MENU": {
+      "COPY": "Másolás",
+      "DELETE": "Törlés"
     }
   },
   "EMAIL_TRANSCRIPT": {
@@ -101,11 +137,25 @@
     }
   },
   "CONVERSATION_SIDEBAR": {
-    "DETAILS_TITLE": "Conversations Details",
-    "ASSIGNEE_LABEL": "Assigned Agent",
-    "TEAM_LABEL": "Assigned Team",
+    "ASSIGNEE_LABEL": "Hozzárendelt ügynök",
+    "SELF_ASSIGN": "Assign to me",
+    "TEAM_LABEL": "Hozzárendelt csapat",
     "SELECT": {
-      "PLACEHOLDER": "None"
+      "PLACEHOLDER": "Nincs"
+    },
+    "ACCORDION": {
+      "CONTACT_DETAILS": "Contact Details",
+      "CONVERSATION_ACTIONS": "Conversation Actions",
+      "CONVERSATION_LABELS": "Beszélgetés cimkék",
+      "CONVERSATION_INFO": "Conversation Information",
+      "CONTACT_ATTRIBUTES": "Contact Attributes",
+      "PREVIOUS_CONVERSATION": "Korábbi beszélgetések"
     }
+  },
+  "EMAIL_HEADER": {
+    "TO": "To",
+    "BCC": "Bcc",
+    "CC": "Cc",
+    "SUBJECT": "Subject"
   }
 }
